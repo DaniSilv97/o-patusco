@@ -22,7 +22,7 @@ class ConsultationRequestFactory extends Factory
             'id' => fake()->uuid(),
             'date' => fake()->dateTimeBetween('-1 month', '+1 month')->format('Y-m-d'),
             'client_note' => fake()->sentence(),
-            'timeframe_id' => ConsultationTimeframe::inRandomOrder()->first()?->id ?? ConsultationTimeframe::factory(),
+            'consultation_timeframe_id' => ConsultationTimeframe::inRandomOrder()->first()?->id ?? ConsultationTimeframe::factory(),
             'animal_id' => Animal::inRandomOrder()->first()?->id ?? Animal::factory(),
         ];
     }
@@ -43,7 +43,7 @@ class ConsultationRequestFactory extends Factory
     public function withTimeframe(ConsultationTimeframe|int $consultationTimeframe): static
     {
         return $this->state(fn (array $attributes) => [
-            'consultationTimeframe_id' => $consultationTimeframe instanceof ConsultationTimeframe ? $consultationTimeframe->id : $consultationTimeframe,
+            'consultation_timeframe_id' => $consultationTimeframe instanceof ConsultationTimeframe ? $consultationTimeframe->id : $consultationTimeframe,
         ]);
     }
 }
