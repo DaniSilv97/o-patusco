@@ -40,8 +40,10 @@
                 </v-list>
             </v-menu>
         </template>
+        <template v-slot>
+            <slot />
+        </template>
     </BaseLayout>
-    <slot />
 </template>
 
 <script setup lang="ts">
