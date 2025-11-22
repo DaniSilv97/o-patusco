@@ -50,13 +50,13 @@
                                     autocomplete="current-password"
                                     @click:append-inner="showPassword = !showPassword"
                                 />
-                                <Link
+                                <!-- <Link
                                     v-if="canResetPassword"
                                     :href="route('password.request')"
                                     class="text-primary hover:text-secondary text-xs font-medium transition"
                                 >
                                     Recuperar palavra-passe
-                                </Link>
+                                </Link> -->
                             </div>
 
                             <div class="flex gap-3">
@@ -103,6 +103,8 @@ const form = useForm({
 });
 
 const submit = () => {
+    console.log(form);
+
     form.post(route('login'), {
         onFinish: () => form.reset('password'),
     });

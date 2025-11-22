@@ -13,8 +13,7 @@ class ConsultationStateSeeder extends Seeder
      */
     public function run(): void
     {
-        ConsultationState::factory()->withName('Não atribuída')->create();
         ConsultationState::factory()->withName('Atribuída')->create();
-        ConsultationState::factory()->withName('Fechada')->create();
+        ConsultationState::factory()->withName('Completa')->create();
     }
 }

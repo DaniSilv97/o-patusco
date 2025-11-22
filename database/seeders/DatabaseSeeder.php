@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Animal;
+use App\Models\Consultation;
+use App\Models\ConsultationRequest;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserRole;
@@ -66,8 +68,21 @@ class DatabaseSeeder extends Seeder
             ->forRole($veterinario)
             ->create();
 
-        $this->command->info('Creating and assignig animal...');
+        $this->command->info('Creating random animals with requests and consultations...');
 
-        Animal::factory()->forOwner($userCliente)->withName('Patusco')->create();
+        for ($i = 0; $i < 20; $i++) {
+            $randomAnimal = Animal::factory()->forOwner($userCliente)->create();
+
+            $requestCount = rand(1, 3);
+            for ($j = 0; $j < $requestCount; $j++) {
+                $request = ConsultationRequest::factory()->forAnimal($randomAnimal)->create();
+
+                if (rand(0, 1)) {
+                    Consultation::factory()->forRequest($request)->create();
+                }
+            }
+        }
+
+        $this->command->info('Database seeding completed successfully.');
     }
 }

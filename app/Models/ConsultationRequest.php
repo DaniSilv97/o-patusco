@@ -29,7 +29,7 @@ class ConsultationRequest extends Model
 
     public function timeframe(): BelongsTo
     {
-        return $this->belongsTo(ConsultationTimeframe::class);
+        return $this->belongsTo(ConsultationTimeframe::class, 'consultation_timeframe_id');
     }
 
     public function animal(): BelongsTo

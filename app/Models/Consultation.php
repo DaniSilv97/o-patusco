@@ -28,7 +28,7 @@ class Consultation extends Model
 
     public function state(): BelongsTo
     {
-        return $this->belongsTo(ConsultationState::class);
+        return $this->belongsTo(ConsultationState::class, 'consultation_state_id');
     }
 
     public function consultationRequest(): BelongsTo

@@ -20,7 +20,7 @@ class ConsultationRequestFactory extends Factory
     {
         return [
             'id' => fake()->uuid(),
-            'date' => fake()->dateTimeBetween('-1 month', '+1 month')->format('Y-m-d'),
+            'date' => fake()->dateTimeBetween('+1 week', '+2 month')->format('Y-m-d'),
             'client_note' => fake()->sentence(),
             'consultation_timeframe_id' => ConsultationTimeframe::inRandomOrder()->first()?->id ?? ConsultationTimeframe::factory(),
             'animal_id' => Animal::inRandomOrder()->first()?->id ?? Animal::factory(),
