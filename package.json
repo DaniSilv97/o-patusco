@@ -24,6 +24,8 @@
     },
     "dependencies": {
         "@inertiajs/vue3": "^2.0.0",
+        "@mdi/font": "^7.4.47",
+        "@mdi/js": "^7.4.47",
         "@tailwindcss/vite": "^4.1.1",
         "@vitejs/plugin-vue": "^5.2.1",
         "@vueuse/core": "^12.8.2",
@@ -39,6 +41,7 @@
         "typescript": "^5.2.2",
         "vite": "^6.2.0",
         "vue": "^3.5.13",
+        "vuetify": "^3.10.11",
         "ziggy-js": "^2.4.2"
     },
     "optionalDependencies": {
