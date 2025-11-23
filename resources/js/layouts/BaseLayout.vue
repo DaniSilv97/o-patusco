@@ -19,9 +19,12 @@
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from '@/stores/useAuthStore';
 import { Head } from '@inertiajs/vue3';
 
 const props = withDefaults(defineProps<{ title?: string }>(), {
     title: 'Homepage',
 });
+
+useAuthStore();
 </script>

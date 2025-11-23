@@ -17,11 +17,11 @@
         <v-card-subtitle>Gerencie os seus pedidos de consulta e histórico</v-card-subtitle>
 
         <v-card-text class="flex w-full flex-col gap-6 pt-4">
-            <PendingRequestsSection :requests="userRequests" :requestCount="requestCount" />
+            <PendingRequestsSection :requests="userRequests" :request-count="requestCount" />
 
             <v-divider></v-divider>
 
-            <ConsultationHistorySection :consultations="userConsultations" :consultationCount="consultationCount" />
+            <ConsultationHistorySection :consultations="userConsultations" :consultation-count="consultationCount" />
 
             <div class="flex gap-3 pt-4">
                 <v-btn size="large" color="primary" class="flex-1 hover:cursor-pointer" @click="handleListConsultations">

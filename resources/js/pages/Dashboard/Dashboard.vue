@@ -11,15 +11,15 @@
                     :user-consultations="userConsultations"
                     @new-consultation="handleNewConsultation"
                     @list-consultations="handleListConsultations"
-                    :requestCount="requestCount"
-                    :consultationCount="consultationCount"
+                    :request-count="requestCount"
+                    :consultation-count="consultationCount"
                 />
 
                 <AnimalsSection
                     :animals="userAnimals"
                     @view-details="handleViewAnimalDetails"
                     @list-animals="handleListAnimal"
-                    :animalCount="animalCount"
+                    :animal-count="animalCount"
                 />
             </div>
         </BaseContainer>

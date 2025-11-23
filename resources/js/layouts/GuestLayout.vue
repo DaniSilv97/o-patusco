@@ -1,7 +1,7 @@
 <template>
     <BaseLayout :title="props.title">
         <template v-slot:append>
-            <Link :href="route('home')" v-if="page.url === '/login'">
+            <Link :href="route('home')" v-if="page.url === route('login')">
                 <v-btn class="hover:cursor-pointer">
                     <v-icon icon="mdi-chevron-left" class="ml-2"></v-icon>
                     Voltar ao menu
@@ -21,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-// import { home, login } from '@/routes';
 import { Link, usePage } from '@inertiajs/vue3';
 import BaseLayout from './BaseLayout.vue';
 

@@ -5,7 +5,8 @@
             <v-menu activator="#menu-activator">
                 <v-list>
                     <v-list-item>
-                        <Link :href="route('login')">
+                        <Link :href="route('home')">
+                            <!-- route('profile') -->
                             <v-btn class="hover:cursor-pointer">
                                 <v-icon icon="mdi-account" class="mr-2"></v-icon>
                                 <v-list-item-title>Perfil</v-list-item-title>
@@ -13,7 +14,8 @@
                         </Link>
                     </v-list-item>
                     <v-list-item>
-                        <Link :href="route('login')">
+                        <Link :href="route('home')">
+                            <!-- route('pets') -->
                             <v-btn class="hover:cursor-pointer">
                                 <v-icon icon="mdi-paw" class="mr-2"></v-icon>
                                 <v-list-item-title>Os meus animais</v-list-item-title>
@@ -21,7 +23,8 @@
                         </Link>
                     </v-list-item>
                     <v-list-item>
-                        <Link :href="route('login')">
+                        <Link :href="route('home')">
+                            <!-- route('appointments') -->
                             <v-btn class="hover:cursor-pointer">
                                 <v-icon icon="mdi-calendar" class="mr-2"></v-icon>
                                 <v-list-item-title>Consultas</v-list-item-title>
