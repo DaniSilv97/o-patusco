@@ -1,19 +1,25 @@
 <template>
-    <v-snackbar v-model="showNotification" :color="notificationType === 'success' ? 'success' : 'error'" timeout="4000" location="top right">
+    <v-snackbar
+        v-model="showNotif"
+        :color="notificationStore.notificationType === 'success' ? 'success' : 'error'"
+        timeout="4000"
+        location="top right"
+    >
         <template v-slot:default>
             <div class="flex items-center gap-3">
                 <v-icon>
-                    {{ notificationType === 'success' ? 'mdi-check-circle' : 'mdi-alert-circle' }}
+                    {{ notificationStore.notificationType === 'success' ? 'mdi-check-circle' : 'mdi-alert-circle' }}
                 </v-icon>
-                <span>{{ notificationMessage }}</span>
+                <span>{{ notificationStore.notificationMessage }}</span>
             </div>
         </template>
     </v-snackbar>
 </template>
 
 <script setup lang="ts">
+import { useNotificationStore } from '@/stores/notificationStore';
 import { usePage } from '@inertiajs/vue3';
-import { computed, ref, watch } from 'vue';
+import { computed, watch } from 'vue';
 
 const page = usePage<{
     flash?: {
@@ -22,15 +28,13 @@ const page = usePage<{
     };
 }>();
 
-const notificationMessage = ref<string>('');
-const notificationType = ref<'success' | 'error'>('success');
+const notificationStore = useNotificationStore();
 
-const showNotification = computed({
-    get: () => !!notificationMessage.value,
+const showNotif = computed({
+    get: () => notificationStore.showNotification(),
     set: (value) => {
         if (!value) {
-            notificationMessage.value = '';
-            notificationType.value = 'success';
+            notificationStore.clearNotification();
         }
     },
 });
@@ -39,13 +43,11 @@ watch(
     () => page.props.flash,
     (flash) => {
         if (flash?.success) {
-            notificationMessage.value = flash.success;
-            notificationType.value = 'success';
+            notificationStore.setNotification(flash.success, 'success');
         } else if (flash?.error) {
-            notificationMessage.value = flash.error;
-            notificationType.value = 'error';
+            notificationStore.setNotification(flash.error, 'error');
         }
     },
-    { deep: true },
+    { deep: true, immediate: true },
 );
 </script>
