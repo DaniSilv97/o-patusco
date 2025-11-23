@@ -11,7 +11,7 @@
             <div class="from-primary to-secondary space-y-6 rounded-lg bg-gradient-to-r p-8 text-center shadow-lg sm:p-12">
                 <h2 class="text-3xl font-bold text-white">Agendar uma Consulta</h2>
                 <p class="text-lg text-white opacity-90">Crie uma nova consulta para o seu animal de estimação. Sem necessidade de login.</p>
-                <Link :href="route('login')">
+                <Link :href="route('consultation')">
                     <v-btn color="white" size="x-large" class="hover:cursor-pointer">
                         <v-icon icon="mdi-calendar-plus" class="mr-2"></v-icon>
                         Criar Consulta

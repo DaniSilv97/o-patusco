@@ -50,13 +50,13 @@
                                     autocomplete="current-password"
                                     @click:append-inner="showPassword = !showPassword"
                                 />
-                                <!-- <Link
+                                <Link
                                     v-if="canResetPassword"
                                     :href="route('password.request')"
                                     class="text-primary hover:text-secondary text-xs font-medium transition"
                                 >
                                     Recuperar palavra-passe
-                                </Link> -->
+                                </Link>
                             </div>
 
                             <div class="flex gap-3">
@@ -86,7 +86,7 @@
 </template>
 <script setup lang="ts">
 import GuestLayout from '@/layouts/GuestLayout.vue';
-import { useForm } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 defineProps<{
@@ -103,8 +103,6 @@ const form = useForm({
 });
 
 const submit = () => {
-    console.log(form);
-
     form.post(route('login'), {
         onFinish: () => form.reset('password'),
     });
