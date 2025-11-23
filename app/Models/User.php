@@ -60,4 +60,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Animal::class);
     }
+    
+    public function hasRole(string $roleName): bool
+    {
+        return $this->roles()->where('name', $roleName)->exists();
+    }
 }
