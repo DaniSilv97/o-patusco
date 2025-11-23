@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('veterinarian_note');
             $table->foreignUuid('consultation_state_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('consultation_request_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

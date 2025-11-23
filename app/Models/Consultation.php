@@ -17,6 +17,7 @@ class Consultation extends Model
         'veterinarian_note',
         'consultation_state_id',
         'consultation_request_id',
+        'user_id',
     ];
 
     protected function casts(): array
@@ -34,5 +35,10 @@ class Consultation extends Model
     public function consultationRequest(): BelongsTo
     {
         return $this->belongsTo(ConsultationRequest::class);
+    }
+
+    public function veterinarian(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

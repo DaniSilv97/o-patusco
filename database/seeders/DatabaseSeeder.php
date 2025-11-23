@@ -78,7 +78,7 @@ class DatabaseSeeder extends Seeder
                 $request = ConsultationRequest::factory()->forAnimal($randomAnimal)->create();
 
                 if (rand(0, 1)) {
-                    Consultation::factory()->forRequest($request)->create();
+                    Consultation::factory()->forRequest($request)->forVeterinarian($userVeterinario)->create();
                 }
             }
         }

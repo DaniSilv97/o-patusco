@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\ConsultationRequest;
 use App\Models\ConsultationState;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,6 +25,7 @@ class ConsultationFactory extends Factory
             'veterinarian_note' => fake()->sentence(),
             'consultation_state_id' => ConsultationState::inRandomOrder()->first()?->id ?? ConsultationState::factory(),
             'consultation_request_id' => ConsultationRequest::inRandomOrder()->first()?->id ?? ConsultationRequest::factory(),
+            'user_id' => User::inRandomOrder()->first()?->id ?? User::factory(),
         ];
     }
 
@@ -44,6 +46,16 @@ class ConsultationFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'consultation_state_id' => $state instanceof ConsultationState ? $state->id : $state,
+        ]);
+    }
+
+    /**
+     * Set a specific veterinarian
+     */
+    public function forVeterinarian(User|int $veterinarian): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'user_id' => $veterinarian instanceof User ? $veterinarian->id : $veterinarian,
         ]);
     }
 }
