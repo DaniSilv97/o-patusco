@@ -1,5 +1,6 @@
 <template>
     <Head :title="props.title"></Head>
+    <FlashNotification />
     <v-layout class="base-layout">
         <v-app-bar scroll-behavior="hide" color="primary">
             <template v-slot:prepend>
@@ -19,6 +20,7 @@
 </template>
 
 <script setup lang="ts">
+import FlashNotification from '@/components/FlashNotification.vue';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { Head } from '@inertiajs/vue3';
 
@@ -26,5 +28,20 @@ const props = withDefaults(defineProps<{ title?: string }>(), {
     title: 'Homepage',
 });
 
+// const page = usePage<{
+//     flash?: {
+//         success?: string;
+//         error?: string;
+//     };
+// }>();
+
+// watch(
+//     () => page.props.flash,
+//     (flash) => {
+//         if (flash?.success) console.log('Success:', flash.success);
+//         if (flash?.error) console.log('Error:', flash.error);
+//     },
+//     { deep: true },
+// );
 useAuthStore();
 </script>
