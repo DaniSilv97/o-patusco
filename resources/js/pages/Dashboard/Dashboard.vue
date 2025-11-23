@@ -2,7 +2,7 @@
     <AuthLayout title="Dashboard">
         <BaseContainer>
             <div class="flex flex-col gap-6">
-                <PageHeader title="Bem-vindo, {{ userName }}!" description="Aqui está um resumo da sua conta e atividades" />
+                <PageHeader :title="`Bem-vindo, ${user.name}!`" description="Aqui está um resumo da sua conta e atividades" />
 
                 <v-divider></v-divider>
 
