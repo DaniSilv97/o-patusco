@@ -1,8 +1,8 @@
 <template>
     <AuthLayout title="Dashboard">
         <BaseContainer>
-            <div class="flex flex-col gap-6 p-8">
-                <WelcomeSection :userName="user.name" />
+            <div class="flex flex-col gap-6">
+                <PageHeader title="Bem-vindo, {{ userName }}!" description="Aqui está um resumo da sua conta e atividades" />
 
                 <v-divider></v-divider>
 
@@ -28,11 +28,12 @@
 
 <script setup lang="ts">
 import BaseContainer from '@/components/BaseContainer.vue';
+import PageHeader from '@/components/PageHeader.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
+import { router } from '@inertiajs/vue3';
 import { computed, PropType } from 'vue';
 import AnimalsSection from './AnimalsSection.vue';
 import ConsultationsSection from './ConsultationsSection.vue';
-import WelcomeSection from './WelcomeSection.vue';
 
 export interface Animal {
     id: string;
@@ -104,12 +105,11 @@ const requestCount = computed(() => props.counts.consultationRequests);
 const consultationCount = computed(() => props.counts.consultations);
 
 const handleNewConsultation = () => {
-    console.log('Navigate to new consultation form');
-    // TODO: Implement navigation
+    router.visit(route('consultation'));
 };
 
 const handleListConsultations = () => {
-    console.log('Navigate to new consultation form');
+    console.log('Navigate to list consultations');
     // TODO: Implement navigation
 };
 
