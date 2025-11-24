@@ -15,5 +15,6 @@ class ConsultationStateSeeder extends Seeder
     {
         ConsultationState::factory()->withName('Atribuída')->create();
         ConsultationState::factory()->withName('Completa')->create();
+        ConsultationState::factory()->withName('Cancelada')->create();
     }
 }
