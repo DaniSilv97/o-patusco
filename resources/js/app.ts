@@ -7,6 +7,7 @@ import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from 'ziggy-js';
 import { initializeTheme } from './composables/useAppearance';
+import vCan from './directives/vCan';
 import { vuetify } from './plugins/vuetify';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -20,6 +21,7 @@ createInertiaApp({
             .use(ZiggyVue)
             .use(vuetify)
             .use(createPinia())
+            .directive('can', vCan)
             .mount(el);
     },
     progress: {
