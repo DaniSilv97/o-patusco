@@ -14,6 +14,14 @@ class VeterinarianMiddleware
             return $next($request);
         }
 
-        abort(403, 'Unauthorized');
+        $user = $request->user();
+        
+        if ($user?->can('is-client')) {
+            return redirect()->route('dashboard')->with('error', '403 | UNAUTHORIZED');
+        } elseif ($user?->can('is-receptionist')) {
+            return redirect()->route('receptionist.dashboard')->with('error', '403 | UNAUTHORIZED');
+        }
+
+        return redirect('/')->with('error', '403 | UNAUTHORIZED');
     }
 }

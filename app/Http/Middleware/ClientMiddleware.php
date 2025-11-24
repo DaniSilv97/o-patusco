@@ -14,6 +14,14 @@ class ClientMiddleware
             return $next($request);
         }
 
-        abort(403, 'Unauthorized');
+        $user = $request->user();
+        
+        if ($user?->can('is-receptionist')) {
+            return redirect()->route('receptionist.dashboard')->with('error', '403 | UNAUTHORIZED');
+        } elseif ($user?->can('is-veterinarian')) {
+            return redirect()->route('veterinarian.dashboard')->with('error', '403 | UNAUTHORIZED');
+        }
+
+        return redirect('/')->with('error', '403 | UNAUTHORIZED');
     }
 }

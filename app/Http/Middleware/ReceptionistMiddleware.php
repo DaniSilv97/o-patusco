@@ -14,6 +14,14 @@ class ReceptionistMiddleware
             return $next($request);
         }
 
-        abort(403, 'Unauthorized');
+        $user = $request->user();
+        
+        if ($user?->can('is-client')) {
+            return redirect()->route('dashboard')->with('error', '403 | UNAUTHORIZED');
+        } elseif ($user?->can('is-veterinarian')) {
+            return redirect()->route('veterinarian.dashboard')->with('error', '403 | UNAUTHORIZED');
+        }
+
+        return redirect('/')->with('error', '403 | UNAUTHORIZED');
     }
 }
