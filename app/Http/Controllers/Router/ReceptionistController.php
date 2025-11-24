@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ConsultationRequestResource;
 use App\Http\Resources\ConsultationResource;
+use App\Models\AnimalType;
 use App\Models\Consultation;
 use App\Models\ConsultationRequest;
 use App\Models\ConsultationState;
@@ -20,18 +21,72 @@ class ReceptionistController extends Controller
         $consultationRequestPage = $request->input('consultation_request_page', 1);
         $consultationPage = $request->input('consultation_page', 1);
 
-        $consultationRequests = ConsultationRequest::with(['timeframe', 'animal'])
-            ->doesntHave('consultation')
-            ->orderBy('date', 'desc')
-            ->paginate($perPage, ['*'], 'consultation_request_page', $consultationRequestPage);
+        $day = $request->input('day');
+        $animalTypeId = $request->input('animal_type');
 
-        $consultations = Consultation::with(['state', 'consultationRequest.animal'])
-            ->orderBy('date', 'desc')
-            ->paginate($perPage, ['*'], 'consultation_page', $consultationPage);
+        $consultationDay = $request->input('consultation_day');
+        $consultationAnimalTypeId = $request->input('consultation_animal_type');
+        $consultationVeterinarianId = $request->input('consultation_veterinarian_id');
+
+        $consultationRequestsQuery = ConsultationRequest::with(['timeframe', 'animal'])
+            ->doesntHave('consultation')
+            ->orderBy('date', 'desc');
+
+        if ($day) {
+            $consultationRequestsQuery->whereDate('date', $day);
+        }
+
+        // Updated: Filter by animal_type_id instead of type
+        if ($animalTypeId) {
+            $consultationRequestsQuery->whereHas('animal', function ($query) use ($animalTypeId) {
+                $query->where('animal_type_id', $animalTypeId);
+            });
+        }
+
+        $consultationRequests = $consultationRequestsQuery->paginate(
+            $perPage,
+            ['*'],
+            'consultation_request_page',
+            $consultationRequestPage
+        );
+
+        $consultationsQuery = Consultation::with(['state', 'consultationRequest.animal', 'veterinarian'])
+            ->orderBy('date', 'desc');
+
+        if ($consultationDay) {
+            $consultationsQuery->whereDate('date', $consultationDay);
+        }
+
+        // Updated: Filter by animal_type_id instead of type
+        if ($consultationAnimalTypeId) {
+            $consultationsQuery->whereHas('consultationRequest.animal', function ($query) use ($consultationAnimalTypeId) {
+                $query->where('animal_type_id', $consultationAnimalTypeId);
+            });
+        }
+
+        if ($consultationVeterinarianId) {
+            $consultationsQuery->where('user_id', $consultationVeterinarianId);
+        }
+
+        $consultations = $consultationsQuery->paginate(
+            $perPage,
+            ['*'],
+            'consultation_page',
+            $consultationPage
+        );
+
+        // Get animal types with id and name
+        $animalTypes = AnimalType::orderBy('name')->get(['id', 'name']);
+
+        $veterinarians = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Veterinário');
+        })->select(['id', 'name'])->orderBy('name')->get();
 
         return Inertia::render('Dashboard/ReceptionistDashboard/ReceptionistDashboard', [
             'consultationRequests' => ConsultationRequestResource::collection($consultationRequests)->response()->getData(true),
             'consultations' => ConsultationResource::collection($consultations)->response()->getData(true),
+            'animalTypes' => $animalTypes,
+            'veterinarians' => $veterinarians,
         ]);
     }
 
@@ -92,7 +147,6 @@ class ReceptionistController extends Controller
     {
         $this->authorize('create', Consultation::class);
 
-        // Validate the separate date and time fields
         $validated = $request->validate([
             'consultation_date' => 'required|date_format:Y-m-d',
             'consultation_time' => 'required|date_format:H:i',
@@ -100,7 +154,6 @@ class ReceptionistController extends Controller
         ]);
 
         try {
-            // Combine date and time into a single datetime
             $consultationDateTime = Carbon::createFromFormat(
                 'Y-m-d H:i',
                 $validated['consultation_date'] . ' ' . $validated['consultation_time']
