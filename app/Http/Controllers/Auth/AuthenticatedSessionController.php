@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,21 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $user = Auth::user();
+        
+        if ($user->can('is-veterinarian')) {
+            return redirect()->route('veterinarian.dashboard');
+        } elseif ($user->can('is-receptionist')) {
+            return redirect()->route('receptionist.dashboard');
+        } elseif ($user->can('is-client')) {
+            return redirect()->route('dashboard');
+        }
+
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/')->with('error', 'Your account does not have an assigned role. Please contact support.');
     }
 
     /**
