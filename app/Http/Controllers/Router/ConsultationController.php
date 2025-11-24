@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Router;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateConsultationRequestRequest;
 use App\Http\Resources\ConsultationRequestResource;
 use App\Http\Resources\ConsultationResource;
 use App\Models\Consultation;
@@ -57,17 +58,13 @@ class ConsultationController extends Controller
         ]);
     }
 
-    public function updateConsultationRequest(Request $request, $id)
+    public function updateConsultationRequest(UpdateConsultationRequestRequest $request, $id)
     {
         $consultationRequest = ConsultationRequest::findOrFail($id);
         
         $this->authorize('update', $consultationRequest);
 
-        $validated = $request->validate([
-            'date' => 'required|date|after_or_equal:today',
-            'consultation_timeframe_id' => 'required|exists:consultation_timeframes,id',
-            'client_note' => 'nullable|string|max:500',
-        ]);
+        $validated = $request->validated();
 
         $consultationRequest->update([
             'date' => $validated['date'],
