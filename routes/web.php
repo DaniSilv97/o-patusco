@@ -38,7 +38,7 @@ Route::middleware(['auth', 'verified', 'client'])->group(function () {
     Route::get('/animals', [AnimalController::class, 'index'])
         ->name('animals');
     Route::get('/animals/{animal}', [AnimalController::class, 'show'])
-        ->name('animal');
+        ->name('animals.show');
     Route::get('/consultations', [ConsultationController::class, 'index'])
         ->name('consultations');
 });
