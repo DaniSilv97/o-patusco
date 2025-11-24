@@ -118,7 +118,7 @@ const updatePage = (state: string | null = null) => {
 };
 
 const handleEditConsultation = (id: string) => {
-    router.visit(route('consultations.show', id));
+    router.visit(route('veterinarian.consultation', id));
 };
 
 const countByState = (state: string): number => {

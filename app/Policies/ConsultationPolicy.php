@@ -32,5 +32,25 @@ class ConsultationPolicy
 
         return false;
     }
+
+    /**
+     * Determine if the user can update a consultation.
+     * 
+     * Users allowed to view:
+     * - Veterinarians assigned to the Consultation
+     * - Receptionists
+     */
+    public function update(User $user, Consultation $consultation): bool
+    {
+        if ($user->can('is-receptionist')) {
+            return true;
+        }
+
+        if ($consultation->user_id === $user->id) {
+            return true;
+        }
+
+        return false;
+    }
 }
  

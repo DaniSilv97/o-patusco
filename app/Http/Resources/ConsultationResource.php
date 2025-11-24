@@ -14,6 +14,7 @@ class ConsultationResource extends JsonResource
             'client_note' => $this->consultationRequest->client_note,
             'animal_name' => $this->consultationRequest->animal->name,
             'state' => $this->state->name,
+            'state_id' => $this->state->id,
         ];
     }
 }

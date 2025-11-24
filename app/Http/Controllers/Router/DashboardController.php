@@ -32,7 +32,7 @@ class DashboardController extends Controller
 
         $consultations = Consultation::whereHas('consultationRequest.animal', fn($q) => $q->where('user_id', $userId))
             ->with('state')
-            ->orderBy('created_at','desc')
+            ->orderBy('date','desc')
             ->latest()
             ->limit(5)
             ->get()

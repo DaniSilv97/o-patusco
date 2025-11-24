@@ -67,8 +67,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('veterinarian')->prefix('veterinarian')->group(function () {
         Route::get('/dashboard', [VeterinarianController::class, 'indexDashboard'])
             ->name('veterinarian.dashboard');
-        Route::get('/consultation/{id}', [VeterinarianController::class, 'showConsultation'])
+        Route::get('/consultation/{consultation}', [VeterinarianController::class, 'showConsultation'])
             ->name('veterinarian.consultation');
+        Route::put('/consultation/update/{consultation}', [VeterinarianController::class, 'updateConsultation'])
+            ->name('veterinarian.consultation.update');
     });
 });
 
