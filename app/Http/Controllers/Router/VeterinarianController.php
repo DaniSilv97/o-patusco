@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Router;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Inertia\Inertia;
 
 class VeterinarianController extends Controller
 {
     public function indexDashboard(Request $request){
-        dd('Index Veterinarian Dashboard');
+        return Inertia::render('Dashboard/VeterinarianDashboard/VeterinarianDashboard', []);
     }
 }

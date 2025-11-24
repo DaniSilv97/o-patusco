@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Consultation;
 use App\Models\ConsultationRequest;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ConsultationController extends Controller
 {
     public function index(Request $request)
     {
-        dd('Index Consultation');
+        return Inertia::render('Consultations/IndexConsultations/IndexConsultations', []);
     }
 
     public function show(Request $request, $id)
@@ -30,12 +31,12 @@ class ConsultationController extends Controller
     private function showConsultationRequest(Request $request, ConsultationRequest $consultationRequest)
     {
         $this->authorize('view', $consultationRequest);
-        dd('Show Consultation Request');
+        return Inertia::render('Consultations/ShowConsultation/ShowConsultation', []);
     }
 
     private function showConsultation(Request $request, Consultation $consultation)
     {
         $this->authorize('view', $consultation);
-        dd('Show Consultation');
+        return Inertia::render('Consultations/ShowConsultation/ShowConsultationRequest', []);
     }
 }
