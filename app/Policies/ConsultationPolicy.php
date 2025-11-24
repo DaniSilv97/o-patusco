@@ -52,5 +52,20 @@ class ConsultationPolicy
 
         return false;
     }
+
+    /**
+     * Determine if the user can create a consultation.
+     * 
+     * Users allowed to view:
+     * - Receptionists
+     */
+    public function create(User $user): bool
+    {
+        if ($user->can('is-receptionist')) {
+            return true;
+        }
+
+        return false;
+    }
 }
  

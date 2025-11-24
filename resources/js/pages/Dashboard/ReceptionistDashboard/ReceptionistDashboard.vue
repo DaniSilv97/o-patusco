@@ -107,10 +107,10 @@ const updatePage = () => {
 };
 
 const handleEditConsultationRequest = (id: string) => {
-    router.visit(route('consultations.show', id));
+    router.visit(route('receptionist.consultation', id));
 };
 
 const handleEditConsultation = (id: string) => {
-    router.visit(route('consultations.show', id));
+    router.visit(route('receptionist.consultation', id));
 };
 </script>

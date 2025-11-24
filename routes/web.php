@@ -56,12 +56,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('consultation.update');
         Route::delete('/consultation/delete/{id}', [ConsultationController::class, 'deleteConsultationRequest'])
             ->name('consultation.delete');
+        Route::get('/consultations/{id}', [ConsultationController::class, 'show'])
+            ->name('consultations.show');
     });
     Route::middleware('receptionist')->prefix('receptionist')->group(function () {
         Route::get('/dashboard', [ReceptionistController::class, 'indexDashboard'])
             ->name('receptionist.dashboard');
-        Route::get('/consultation/{id}', [ReceptionistController::class, 'showConsultation'])
+        Route::get('/consultation/{id}', [ReceptionistController::class, 'show'])
             ->name('receptionist.consultation');
+        Route::post('/consultation/create/{consultationRequest}', [ReceptionistController::class, 'createConsultation'])
+            ->name('receptionist.consultation.create');
     });
 
     Route::middleware('veterinarian')->prefix('veterinarian')->group(function () {
@@ -75,8 +79,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/consultations/{id}', [ConsultationController::class, 'show'])
-        ->name('consultations.show');
 });
 
 
