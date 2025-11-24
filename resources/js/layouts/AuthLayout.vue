@@ -4,35 +4,56 @@
             <v-btn id="menu-activator" color="white" icon="mdi-menu" class="hover:cursor-pointer"></v-btn>
             <v-menu activator="#menu-activator">
                 <v-list>
-                    <v-list-item>
-                        <Link :href="route('home')">
-                            <!-- route('profile') -->
-                            <v-btn class="hover:cursor-pointer">
-                                <v-icon icon="mdi-account" class="mr-2"></v-icon>
-                                <v-list-item-title>Perfil</v-list-item-title>
+                    <v-list-item v-can="['is-client']">
+                        <Link :href="route('dashboard')">
+                            <v-btn class="!flex w-full !justify-start hover:cursor-pointer">
+                                <v-icon icon="mdi-view-dashboard" class="mr-2"></v-icon>
+                                <v-list-item-title>Dashboard</v-list-item-title>
+                            </v-btn>
+                        </Link>
+                    </v-list-item>
+                    <v-list-item v-can="['is-receptionist']">
+                        <Link :href="route('receptionist.dashboard')">
+                            <v-btn class="!flex w-full !justify-start hover:cursor-pointer">
+                                <v-icon icon="mdi-view-dashboard" class="mr-2"></v-icon>
+                                <v-list-item-title>Dashboard Rececionista</v-list-item-title>
+                            </v-btn>
+                        </Link>
+                    </v-list-item>
+                    <v-list-item v-can="['is-veterinarian']">
+                        <Link :href="route('veterinarian.dashboard')">
+                            <v-btn class="!flex w-full !justify-start hover:cursor-pointer">
+                                <v-icon icon="mdi-view-dashboard" class="mr-2"></v-icon>
+                                <v-list-item-title>Dashboard Veterinário</v-list-item-title>
                             </v-btn>
                         </Link>
                     </v-list-item>
                     <v-list-item>
-                        <Link :href="route('home')">
-                            <!-- route('pets') -->
-                            <v-btn class="hover:cursor-pointer">
+                        <Link :href="route('profile.edit')">
+                            <v-btn class="!flex w-full !justify-start hover:cursor-pointer">
+                                <v-icon icon="mdi-account mr-2"></v-icon>
+                                <v-list-item-title>Perfil</v-list-item-title>
+                            </v-btn>
+                        </Link>
+                    </v-list-item>
+                    <v-list-item v-can="['is-client']">
+                        <Link :href="route('animals')">
+                            <v-btn class="!flex w-full !justify-start hover:cursor-pointer">
                                 <v-icon icon="mdi-paw" class="mr-2"></v-icon>
                                 <v-list-item-title>Os meus animais</v-list-item-title>
                             </v-btn>
                         </Link>
                     </v-list-item>
-                    <v-list-item>
-                        <Link :href="route('home')">
-                            <!-- route('appointments') -->
-                            <v-btn class="hover:cursor-pointer">
+                    <v-list-item v-can="['is-client']">
+                        <Link :href="route('consultations')">
+                            <v-btn class="!flex w-full !justify-start hover:cursor-pointer">
                                 <v-icon icon="mdi-calendar" class="mr-2"></v-icon>
                                 <v-list-item-title>Consultas</v-list-item-title>
                             </v-btn>
                         </Link>
                     </v-list-item>
                     <v-list-item>
-                        <v-btn class="hover:cursor-pointer" @click="logout">
+                        <v-btn class="!flex w-full !justify-start hover:cursor-pointer" @click="logout">
                             <v-icon icon="mdi-logout" class="mr-2"></v-icon>
                             <v-list-item-title>Sair</v-list-item-title>
                         </v-btn>
