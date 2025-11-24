@@ -45,7 +45,7 @@ class DashboardController extends Controller
         $consultationsCount = Consultation::whereHas('consultationRequest.animal', fn($q) => $q->where('user_id', $userId))
             ->count();
 
-        return Inertia::render('Dashboard/Dashboard', [
+        return Inertia::render('Dashboard/ClientDashboard/Dashboard', [
             'user' => $user->only(['id', 'name', 'email']),
             'animals' => AnimalResource::collection($user->animals)->values(),
             'consultationRequests' => ConsultationRequestResource::collection($consultationRequests)->values(),
