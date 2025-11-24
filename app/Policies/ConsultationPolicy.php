@@ -18,7 +18,7 @@ class ConsultationPolicy
      */
     public function view(User $user, Consultation $consultation): bool
     {
-        if ($user->hasRole('Rececionista')) {
+        if ($user->can('is-receptionist')) {
             return true;
         }
 
