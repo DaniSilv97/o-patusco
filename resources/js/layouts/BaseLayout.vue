@@ -29,21 +29,5 @@ import { Head, Link } from '@inertiajs/vue3';
 const props = withDefaults(defineProps<{ title?: string }>(), {
     title: 'Homepage',
 });
-
-// const page = usePage<{
-//     flash?: {
-//         success?: string;
-//         error?: string;
-//     };
-// }>();
-
-// watch(
-//     () => page.props.flash,
-//     (flash) => {
-//         if (flash?.success) console.log('Success:', flash.success);
-//         if (flash?.error) console.log('Error:', flash.error);
-//     },
-//     { deep: true },
-// );
 useAuthStore();
 </script>

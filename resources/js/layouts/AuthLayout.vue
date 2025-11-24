@@ -28,14 +28,14 @@
                             </v-btn>
                         </Link>
                     </v-list-item>
-                    <v-list-item>
+                    <!-- <v-list-item>
                         <Link :href="route('profile.edit')">
                             <v-btn class="!flex w-full !justify-start hover:cursor-pointer">
                                 <v-icon icon="mdi-account mr-2"></v-icon>
                                 <v-list-item-title>Perfil</v-list-item-title>
                             </v-btn>
                         </Link>
-                    </v-list-item>
+                    </v-list-item> -->
                     <v-list-item v-can="['is-client']">
                         <Link :href="route('animals')">
                             <v-btn class="!flex w-full !justify-start hover:cursor-pointer">
