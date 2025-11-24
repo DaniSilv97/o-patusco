@@ -55,7 +55,7 @@ Route::middleware(['auth', 'verified', 'veterinarian'])->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/consultations/{id}', [ConsultationController::class, 'show'])
-        ->name('consultations');
+        ->name('consultations.show');
 });
 
 
