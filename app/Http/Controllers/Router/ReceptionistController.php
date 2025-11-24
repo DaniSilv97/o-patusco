@@ -28,7 +28,7 @@ class ReceptionistController extends Controller
         $consultationAnimalTypeId = $request->input('consultation_animal_type');
         $consultationVeterinarianId = $request->input('consultation_veterinarian_id');
 
-        $consultationRequestsQuery = ConsultationRequest::with(['timeframe', 'animal'])
+        $consultationRequestsQuery = ConsultationRequest::with(['timeframe', 'animal.animalType'])
             ->doesntHave('consultation')
             ->orderBy('date', 'desc');
 
@@ -36,7 +36,6 @@ class ReceptionistController extends Controller
             $consultationRequestsQuery->whereDate('date', $day);
         }
 
-        // Updated: Filter by animal_type_id instead of type
         if ($animalTypeId) {
             $consultationRequestsQuery->whereHas('animal', function ($query) use ($animalTypeId) {
                 $query->where('animal_type_id', $animalTypeId);
@@ -57,7 +56,6 @@ class ReceptionistController extends Controller
             $consultationsQuery->whereDate('date', $consultationDay);
         }
 
-        // Updated: Filter by animal_type_id instead of type
         if ($consultationAnimalTypeId) {
             $consultationsQuery->whereHas('consultationRequest.animal', function ($query) use ($consultationAnimalTypeId) {
                 $query->where('animal_type_id', $consultationAnimalTypeId);
@@ -75,7 +73,6 @@ class ReceptionistController extends Controller
             $consultationPage
         );
 
-        // Get animal types with id and name
         $animalTypes = AnimalType::orderBy('name')->get(['id', 'name']);
 
         $veterinarians = User::whereHas('roles', function ($query) {

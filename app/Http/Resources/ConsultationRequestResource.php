@@ -12,6 +12,7 @@ class ConsultationRequestResource extends JsonResource
             'date' => $this->date,
             'client_note' => $this->client_note,
             'animal_name' => $this->animal->name,
+            'animal_type' => $this->animal->animalType->name,
             'timeframe' => $this->timeframe->name,
         ];
     }

@@ -15,11 +15,11 @@
 
             <v-card-text class="bg-gray-50 py-4">
                 <div class="space-y-4">
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                             <label class="mb-2 block text-sm font-medium text-gray-700"> Filtrar por Data </label>
                             <v-text-field
-                                v-model="localFilters.day"
+                                v-model="localFilters.consultation_day"
                                 type="date"
                                 variant="outlined"
                                 density="compact"
@@ -30,26 +30,11 @@
                         <div>
                             <label class="mb-2 block text-sm font-medium text-gray-700"> Filtrar por Tipo de Animal </label>
                             <v-select
-                                v-model="localFilters.animal_type"
+                                v-model="localFilters.consultation_animal_type_id"
                                 :items="animalTypes"
                                 item-title="name"
                                 item-value="id"
                                 placeholder="Selecionar tipo de animal"
-                                variant="outlined"
-                                density="compact"
-                                clearable
-                                @update:model-value="applyFilters"
-                            ></v-select>
-                        </div>
-
-                        <div>
-                            <label class="mb-2 block text-sm font-medium text-gray-700"> Filtrar por Veterinário </label>
-                            <v-select
-                                v-model="localFilters.veterinarian_id"
-                                :items="veterinarians"
-                                item-title="name"
-                                item-value="id"
-                                placeholder="Selecionar veterinário"
                                 variant="outlined"
                                 density="compact"
                                 clearable
@@ -173,15 +158,10 @@ export interface AnimalType {
     name: string;
 }
 
-export interface Veterinarian {
-    id: string;
-    name: string;
-}
-
 interface Filters {
-    day?: string;
-    animal_type?: string;
-    veterinarian_id?: string;
+    consultation_day?: string;
+    consultation_animal_id?: string;
+    consultation_animal_type_id?: string;
 }
 
 const props = defineProps({
@@ -197,18 +177,14 @@ const props = defineProps({
         type: Array as () => AnimalType[],
         default: () => [],
     },
-    veterinarians: {
-        type: Array as () => Veterinarian[],
-        default: () => [],
-    },
 });
 
 const emit = defineEmits(['page-change', 'filter-change', 'edit']);
 
 const localFilters = ref<Filters>({
-    day: undefined,
-    animal_type: undefined,
-    veterinarian_id: undefined,
+    consultation_day: undefined,
+    consultation_animal_id: undefined,
+    consultation_animal_type_id: undefined,
 });
 
 const displayedPages = computed(() => {
@@ -246,18 +222,18 @@ const hasActiveFilters = computed(() => {
 
 const applyFilters = () => {
     const filters: Filters = {};
-    if (localFilters.value.day) filters.day = localFilters.value.day;
-    if (localFilters.value.animal_type) filters.animal_type = localFilters.value.animal_type;
-    if (localFilters.value.veterinarian_id) filters.veterinarian_id = localFilters.value.veterinarian_id;
+    if (localFilters.value.consultation_day) filters.consultation_day = localFilters.value.consultation_day;
+    if (localFilters.value.consultation_animal_id) filters.consultation_animal_id = localFilters.value.consultation_animal_id;
+    if (localFilters.value.consultation_animal_type_id) filters.consultation_animal_type_id = localFilters.value.consultation_animal_type_id;
 
     emit('filter-change', filters);
 };
 
 const clearFilters = () => {
     localFilters.value = {
-        day: undefined,
-        animal_type: undefined,
-        veterinarian_id: undefined,
+        consultation_day: undefined,
+        consultation_animal_id: undefined,
+        consultation_animal_type_id: undefined,
     };
     emit('filter-change', {});
 };

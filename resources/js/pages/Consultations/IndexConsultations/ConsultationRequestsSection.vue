@@ -3,19 +3,19 @@
         <v-card class="shadow-md">
             <v-card-title class="text-xl font-semibold">
                 <div class="flex items-center gap-2">
-                    <v-icon>mdi-clipboard-check-outline</v-icon>
-                    Consultas Agendadas
+                    <v-icon>mdi-file-document-outline</v-icon>
+                    Pedidos de Consulta Pendentes
                 </div>
             </v-card-title>
             <v-card-subtitle class="text-base">
-                Total de consultas: <strong>{{ pagination.total }}</strong>
+                Total de pedidos pendentes: <strong>{{ pagination.total }}</strong>
             </v-card-subtitle>
 
             <v-divider></v-divider>
 
             <v-card-text class="bg-gray-50 py-4">
                 <div class="space-y-4">
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                             <label class="mb-2 block text-sm font-medium text-gray-700"> Filtrar por Data </label>
                             <v-text-field
@@ -30,26 +30,11 @@
                         <div>
                             <label class="mb-2 block text-sm font-medium text-gray-700"> Filtrar por Tipo de Animal </label>
                             <v-select
-                                v-model="localFilters.animal_type"
+                                v-model="localFilters.animal_type_id"
                                 :items="animalTypes"
                                 item-title="name"
                                 item-value="id"
                                 placeholder="Selecionar tipo de animal"
-                                variant="outlined"
-                                density="compact"
-                                clearable
-                                @update:model-value="applyFilters"
-                            ></v-select>
-                        </div>
-
-                        <div>
-                            <label class="mb-2 block text-sm font-medium text-gray-700"> Filtrar por Veterinário </label>
-                            <v-select
-                                v-model="localFilters.veterinarian_id"
-                                :items="veterinarians"
-                                item-title="name"
-                                item-value="id"
-                                placeholder="Selecionar veterinário"
                                 variant="outlined"
                                 density="compact"
                                 clearable
@@ -70,35 +55,32 @@
             <v-divider></v-divider>
 
             <v-card-text class="p-0">
-                <div v-if="consultations.length === 0" class="flex flex-col items-center justify-center py-12 text-center">
-                    <v-icon size="64" class="mb-4 text-gray-300">mdi-calendar-blank-outline</v-icon>
-                    <p class="text-lg text-gray-500">Sem consultas agendadas</p>
+                <div v-if="consultationRequests.length === 0" class="flex flex-col items-center justify-center py-12 text-center">
+                    <v-icon size="64" class="mb-4 text-gray-300">mdi-inbox-multiple-outline</v-icon>
+                    <p class="text-lg text-gray-500">Sem pedidos de consulta pendentes</p>
                 </div>
 
                 <div v-else class="divide-y">
                     <div
-                        v-for="consultation in consultations"
-                        :key="consultation.id"
-                        class="cursor-pointer border-l-4 border-green-500 p-4 transition-colors hover:bg-gray-50"
-                        @click="emit('edit', consultation.id)"
+                        v-for="request in consultationRequests"
+                        :key="request.id"
+                        class="cursor-pointer border-l-4 border-blue-500 p-4 transition-colors hover:bg-gray-50"
+                        @click="emit('edit', request.id)"
                     >
                         <div class="flex items-start justify-between">
                             <div class="flex-1">
                                 <div class="mb-2 flex items-center gap-2">
-                                    <p class="font-semibold text-gray-900">{{ consultation.animal_name }}</p>
-                                    <v-chip size="x-small" :color="getStateColor(consultation.state)" text-color="white">
-                                        {{ consultation.state }}
+                                    <p class="font-semibold text-gray-900">{{ request.animal_name }}</p>
+                                    <v-chip size="x-small" color="info" text-color="white">
+                                        {{ request.timeframe }}
                                     </v-chip>
                                     <v-chip size="x-small" color="secondary" text-color="white">
-                                        {{ consultation.animal_type }}
+                                        {{ request.animal_type }}
                                     </v-chip>
                                 </div>
-                                <div class="mb-2 flex items-center gap-4 text-sm text-gray-600">
-                                    <span><strong>Data:</strong> {{ formatDate(consultation.date) }}</span>
-                                    <span><strong>Veterinário:</strong> {{ consultation.veterinarian_name }}</span>
-                                </div>
-                                <p v-if="consultation.veterinarian_note" class="text-sm text-gray-700">
-                                    <strong>Notas:</strong> {{ truncateText(consultation.veterinarian_note, 80) }}
+                                <p class="text-sm text-gray-600"><strong>Data Solicitada:</strong> {{ formatDate(request.date) }}</p>
+                                <p v-if="request.client_note" class="mt-2 text-sm text-gray-700">
+                                    <strong>Observações:</strong> {{ truncateText(request.client_note, 80) }}
                                 </p>
                             </div>
                             <v-icon class="ml-4 text-gray-400">mdi-chevron-right</v-icon>
@@ -140,7 +122,7 @@
                     ></v-btn>
                 </div>
 
-                <div class="text-center text-sm text-gray-600">Ver {{ startIndex }} a {{ endIndex }} de {{ pagination.total }} consultas</div>
+                <div class="text-center text-sm text-gray-600">Ver {{ startIndex }} a {{ endIndex }} de {{ pagination.total }} pedidos</div>
             </v-card-text>
         </v-card>
     </div>
@@ -149,16 +131,13 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-export interface Consultation {
+export interface ConsultationRequest {
     id: string;
     date: string;
-    veterinarian_note: string;
     client_note: string;
     animal_name: string;
     animal_type: string;
-    state: string;
-    veterinarian_name: string;
-    veterinarian_id: string;
+    timeframe: string;
 }
 
 export interface Pagination {
@@ -173,20 +152,14 @@ export interface AnimalType {
     name: string;
 }
 
-export interface Veterinarian {
-    id: string;
-    name: string;
-}
-
 interface Filters {
     day?: string;
-    animal_type?: string;
-    veterinarian_id?: string;
+    animal_type_id?: string;
 }
 
 const props = defineProps({
-    consultations: {
-        type: Array as () => Consultation[],
+    consultationRequests: {
+        type: Array as () => ConsultationRequest[],
         default: () => [],
     },
     pagination: {
@@ -197,18 +170,13 @@ const props = defineProps({
         type: Array as () => AnimalType[],
         default: () => [],
     },
-    veterinarians: {
-        type: Array as () => Veterinarian[],
-        default: () => [],
-    },
 });
 
 const emit = defineEmits(['page-change', 'filter-change', 'edit']);
 
 const localFilters = ref<Filters>({
     day: undefined,
-    animal_type: undefined,
-    veterinarian_id: undefined,
+    animal_type_id: undefined,
 });
 
 const displayedPages = computed(() => {
@@ -247,8 +215,7 @@ const hasActiveFilters = computed(() => {
 const applyFilters = () => {
     const filters: Filters = {};
     if (localFilters.value.day) filters.day = localFilters.value.day;
-    if (localFilters.value.animal_type) filters.animal_type = localFilters.value.animal_type;
-    if (localFilters.value.veterinarian_id) filters.veterinarian_id = localFilters.value.veterinarian_id;
+    if (localFilters.value.animal_type_id) filters.animal_type_id = localFilters.value.animal_type_id;
 
     emit('filter-change', filters);
 };
@@ -256,8 +223,7 @@ const applyFilters = () => {
 const clearFilters = () => {
     localFilters.value = {
         day: undefined,
-        animal_type: undefined,
-        veterinarian_id: undefined,
+        animal_type_id: undefined,
     };
     emit('filter-change', {});
 };
@@ -280,18 +246,5 @@ const formatDate = (dateString: string): string => {
 
 const truncateText = (text: string, length: number): string => {
     return text.length > length ? text.substring(0, length) + '...' : text;
-};
-
-const getStateColor = (state: string): string => {
-    const colors: Record<string, string> = {
-        Completed: 'success',
-        Pending: 'warning',
-        Cancelled: 'error',
-        Concluída: 'success',
-        Pendente: 'warning',
-        Cancelada: 'error',
-        Atribuída: 'info',
-    };
-    return colors[state] || 'default';
 };
 </script>

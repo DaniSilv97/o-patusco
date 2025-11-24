@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateConsultationRequestRequest;
 use App\Http\Resources\ConsultationRequestResource;
 use App\Http\Resources\ConsultationResource;
+use App\Models\Animal;
+use App\Models\AnimalType;
 use App\Models\Consultation;
 use App\Models\ConsultationRequest;
 use App\Models\ConsultationTimeframe;
@@ -16,7 +18,87 @@ class ConsultationController extends Controller
 {
     public function index(Request $request)
     {
-        return Inertia::render('Consultations/IndexConsultations/IndexConsultations', []);
+        $userId = $request->user()->id;
+        $perPage = 5;
+        $consultationRequestPage = $request->input('consultation_request_page', 1);
+        $consultationPage = $request->input('consultation_page', 1);
+
+        $day = $request->input('day');
+        $animalId = $request->input('animal_id');
+        $animalTypeId = $request->input('animal_type_id');
+
+        $consultationDay = $request->input('consultation_day');
+        $consultationAnimalId = $request->input('consultation_animal_id');
+        $consultationAnimalTypeId = $request->input('consultation_animal_type_id');
+
+        $consultationRequestsQuery = ConsultationRequest::with(['timeframe', 'animal'])
+            ->whereHas('animal', fn($q) => $q->where('user_id', $userId))
+            ->doesntHave('consultation')
+            ->orderBy('created_at', 'desc');
+
+        if ($day) {
+            $consultationRequestsQuery->whereDate('date', $day);
+        }
+
+        if ($animalId) {
+            $consultationRequestsQuery->where('animal_id', $animalId);
+        }
+
+        if ($animalTypeId) {
+            $consultationRequestsQuery->whereHas('animal', function ($query) use ($animalTypeId) {
+                $query->where('animal_type_id', $animalTypeId);
+            });
+        }
+
+        $consultationRequests = $consultationRequestsQuery->paginate(
+            $perPage,
+            ['*'],
+            'consultation_request_page',
+            $consultationRequestPage
+        );
+
+        $consultationsQuery = Consultation::with(['state', 'consultationRequest.animal'])
+            ->whereHas('consultationRequest.animal', fn($q) => $q->where('user_id', $userId))
+            ->orderBy('date', 'desc');
+
+        if ($consultationDay) {
+            $consultationsQuery->whereDate('date', $consultationDay);
+        }
+
+        if ($consultationAnimalId) {
+            $consultationsQuery->whereHas('consultationRequest.animal', function ($query) use ($consultationAnimalId) {
+                $query->where('id', $consultationAnimalId);
+            });
+        }
+
+        if ($consultationAnimalTypeId) {
+            $consultationsQuery->whereHas('consultationRequest.animal', function ($query) use ($consultationAnimalTypeId) {
+                $query->where('animal_type_id', $consultationAnimalTypeId);
+            });
+        }
+
+        $consultations = $consultationsQuery->paginate(
+            $perPage,
+            ['*'],
+            'consultation_page',
+            $consultationPage
+        );
+
+        $animals = Animal::where('user_id', $userId)
+            ->select(['id', 'name'])
+            ->orderBy('name')
+            ->get();
+
+        $animalTypes = AnimalType::orderBy('name')
+            ->select(['id', 'name'])
+            ->get();
+
+        return Inertia::render('Consultations/IndexConsultations/IndexConsultations', [
+            'consultationRequests' => ConsultationRequestResource::collection($consultationRequests)->response()->getData(true),
+            'consultations' => ConsultationResource::collection($consultations)->response()->getData(true),
+            'animals' => $animals,
+            'animalTypes' => $animalTypes,
+        ]);
     }
 
     public function show(Request $request, $id)
