@@ -109,17 +109,14 @@ const handleNewConsultation = () => {
 };
 
 const handleListConsultations = () => {
-    console.log('Navigate to list consultations');
-    // TODO: Implement navigation
+    router.visit(route('consultations'));
 };
 
 const handleViewAnimalDetails = (animalId: string) => {
-    console.log('View animal details:', animalId);
-    // TODO: Implement navigation
+    router.visit(route('animals.show', animalId));
 };
 
 const handleListAnimal = () => {
-    console.log('Navigate to animal list');
-    // TODO: Implement navigation
+    router.visit(route('animals'));
 };
 </script>
