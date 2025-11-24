@@ -1,9 +1,9 @@
 <template>
-    <AuthLayout :title="animalData.name || 'Animal'">
+    <AuthLayout title="Novo Animal">
         <BaseContainer>
             <div class="flex flex-col gap-6">
                 <div class="flex items-center justify-between">
-                    <PageHeader :title="animalData.name || 'Animal'" description="Detalhes e edição do animal de estimação" />
+                    <PageHeader title="Registar Novo Animal" description="Adicione os detalhes do seu animal de estimação" />
                     <Link :href="route('animals')">
                         <v-btn variant="outlined" prepend-icon="mdi-arrow-left"> Voltar </v-btn>
                     </Link>
@@ -72,16 +72,12 @@
                             <div class="flex gap-4">
                                 <v-btn type="submit" color="primary" class="flex-1" :loading="loading" :disabled="loading">
                                     <v-icon icon="mdi-check" class="mr-2"></v-icon>
-                                    Guardar Alterações
-                                </v-btn>
-                                <v-btn v-if="hasChanges" @click="resetForm" variant="outlined" color="warning" class="flex-1" :disabled="loading">
-                                    <v-icon icon="mdi-refresh" class="mr-2"></v-icon>
-                                    Descartar
+                                    Registar Animal
                                 </v-btn>
                                 <Link :href="route('animals')">
                                     <v-btn variant="outlined" class="flex-1">
                                         <v-icon icon="mdi-close" class="mr-2"></v-icon>
-                                        Voltar
+                                        Cancelar
                                     </v-btn>
                                 </Link>
                             </div>
@@ -93,105 +89,69 @@
                             <template v-slot:prepend>
                                 <v-icon color="blue" icon="mdi-information"></v-icon>
                             </template>
-                            <v-card-title class="text-base">Informações do Animal</v-card-title>
+                            <v-card-title class="text-base">Dicas para Preenchimento</v-card-title>
                             <v-card-text class="space-y-3 text-sm text-gray-700">
-                                <div class="flex justify-between">
-                                    <span class="font-medium">Tipo:</span>
-                                    <span>{{ getAnimalTypeName(animalData.animal_type_id) }}</span>
+                                <div class="flex gap-2">
+                                    <v-icon icon="mdi-check-circle" color="green" size="small"></v-icon>
+                                    <span>Use o nome pelo qual o animal é conhecido (2-50 caracteres)</span>
                                 </div>
-                                <div class="flex justify-between">
-                                    <span class="font-medium">Idade:</span>
-                                    <span>{{ formatAge(calculateAge(animalData.birthday)) }}</span>
+                                <div class="flex gap-2">
+                                    <v-icon icon="mdi-check-circle" color="green" size="small"></v-icon>
+                                    <span>A data de nascimento é importante para registos médicos</span>
                                 </div>
-                                <div class="flex justify-between">
-                                    <span class="font-medium">Data de Nascimento:</span>
-                                    <span>{{ formatDate(animalData.birthday) }}</span>
+                                <div class="flex gap-2">
+                                    <v-icon icon="mdi-check-circle" color="green" size="small"></v-icon>
+                                    <span>Você pode editar estas informações mais tarde</span>
                                 </div>
                             </v-card-text>
                         </v-card>
+
+                        <v-card v-if="form.animal.birthday" class="rounded-lg border border-purple-200 bg-purple-50 p-4">
+                            <v-card-title class="text-base">Informações do Animal</v-card-title>
+                            <v-card-text class="space-y-2 text-sm">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-600">Nome:</span>
+                                    <strong>{{ form.animal.name || 'Não preenchido' }}</strong>
+                                </div>
+                                <v-divider></v-divider>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-600">Tipo:</span>
+                                    <strong>{{ getAnimalTypeName() || 'Não selecionado' }}</strong>
+                                </div>
+                                <v-divider></v-divider>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-600">Idade:</span>
+                                    <strong>{{ formatAge(calculateAge(form.animal.birthday)) }}</strong>
+                                </div>
+                            </v-card-text>
+                        </v-card>
+
+                        <div v-else class="flex flex-col items-center justify-center gap-3 rounded-lg bg-gray-100 p-8">
+                            <v-icon size="48" color="gray">mdi-paw</v-icon>
+                            <p class="text-center text-sm text-gray-600">Preencha os detalhes para visualizar a pré-visualização</p>
+                        </div>
 
                         <v-card class="rounded-lg bg-amber-50 p-4">
                             <template v-slot:prepend>
-                                <v-icon color="amber" icon="mdi-alert-circle"></v-icon>
+                                <v-icon color="amber" icon="mdi-alert"></v-icon>
                             </template>
-                            <v-card-title class="text-base">Dicas para Edição</v-card-title>
-                            <v-card-text class="space-y-3 text-sm text-gray-700">
-                                <div class="flex gap-2">
-                                    <v-icon icon="mdi-check-circle" color="green" size="small"></v-icon>
-                                    <span>Altere apenas os campos que deseja atualizar</span>
-                                </div>
-                                <div class="flex gap-2">
-                                    <v-icon icon="mdi-check-circle" color="green" size="small"></v-icon>
-                                    <span>Todos os campos são obrigatórios</span>
-                                </div>
-                                <div class="flex gap-2">
-                                    <v-icon icon="mdi-check-circle" color="green" size="small"></v-icon>
-                                    <span>Clique em "Descartar" para reverter as alterações</span>
-                                </div>
-                            </v-card-text>
-                        </v-card>
-
-                        <v-card class="rounded-lg border-l-4 border-red-500 bg-red-50 p-4">
-                            <template v-slot:prepend>
-                                <v-icon color="red" icon="mdi-delete"></v-icon>
-                            </template>
-                            <v-card-title class="text-base">Zona de Perigo</v-card-title>
-                            <v-card-text class="space-y-3">
-                                <p class="text-sm text-gray-700">Remova permanentemente este animal e todos os seus registos associados.</p>
-                                <v-btn
-                                    @click="showDeleteDialog = true"
-                                    variant="outlined"
-                                    color="red"
-                                    size="small"
-                                    class="w-full"
-                                    :disabled="loading"
-                                >
-                                    <v-icon icon="mdi-trash-can" class="mr-2"></v-icon>
-                                    Eliminar Animal
-                                </v-btn>
+                            <v-card-title class="text-base">Campos Obrigatórios</v-card-title>
+                            <v-card-text class="text-sm text-gray-700">
+                                Os campos marcados com <span class="font-bold text-red-500">*</span> devem ser preenchidos antes de registar o animal.
                             </v-card-text>
                         </v-card>
                     </div>
                 </div>
             </div>
         </BaseContainer>
-
-        <!-- Delete Confirmation Dialog -->
-        <v-dialog v-model="showDeleteDialog" max-width="500">
-            <v-card>
-                <v-card-title class="flex items-center gap-2 bg-red-50">
-                    <v-icon color="red" icon="mdi-alert-circle"></v-icon>
-                    Confirmar Eliminação
-                </v-card-title>
-
-                <v-card-text class="pt-6">
-                    <p class="mb-4 text-gray-700">
-                        Tem a certeza que deseja eliminar o animal <strong>{{ animalData.name }}</strong
-                        >?
-                    </p>
-                    <p class="text-sm text-red-600">
-                        <strong>Aviso:</strong> Esta ação é irreversível e eliminará todos os registos e consultas associados.
-                    </p>
-                </v-card-text>
-
-                <v-card-actions class="flex justify-end gap-2 bg-gray-50 p-4">
-                    <v-btn @click="showDeleteDialog = false" variant="outlined"> Cancelar </v-btn>
-                    <v-btn @click="deleteAnimal" color="red" :loading="deleting" :disabled="deleting">
-                        <v-icon icon="mdi-trash-can" class="mr-2"></v-icon>
-                        Eliminar
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
     </AuthLayout>
 </template>
-
 <script setup lang="ts">
 import BaseContainer from '@/components/BaseContainer.vue';
 import PageHeader from '@/components/PageHeader.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { Link, useForm } from '@inertiajs/vue3';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 
 interface AnimalType {
     id: string;
@@ -203,56 +163,22 @@ interface AgeObject {
     months: number;
 }
 
-const props = defineProps<{
-    animal: any;
-    animalTypes: AnimalType[];
-}>();
-
-const animalData = computed(() => {
-    return props.animal?.data || props.animal || {};
+const props = defineProps({
+    animalTypes: {
+        type: Array as () => AnimalType[],
+        default: () => [],
+    },
 });
-
-const convertDateToInputFormat = (dateString: string): string => {
-    if (!dateString) return '';
-    try {
-        const date = new Date(dateString);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    } catch {
-        return '';
-    }
-};
 
 const form = useForm({
     animal: {
-        name: animalData.value.name || '',
-        animalTypeId: animalData.value.animal_type_id || '',
-        birthday: convertDateToInputFormat(animalData.value.birthday) || '',
+        name: '',
+        animalTypeId: null as string | null,
+        birthday: '',
     },
 });
-
-const deleting = ref(false);
-const showDeleteDialog = ref(false);
-
-const originalForm = computed(() => ({
-    animal: {
-        name: animalData.value.name || '',
-        animalTypeId: animalData.value.animal_type_id || '',
-        birthday: convertDateToInputFormat(animalData.value.birthday) || '',
-    },
-}));
 
 const loading = computed(() => form.processing);
-
-const hasChanges = computed(() => {
-    return (
-        form.animal.name !== originalForm.value.animal.name ||
-        form.animal.animalTypeId !== originalForm.value.animal.animalTypeId ||
-        form.animal.birthday !== originalForm.value.animal.birthday
-    );
-});
 
 const calculateAge = (birthday: string): AgeObject => {
     try {
@@ -288,21 +214,10 @@ const formatAge = (ageObj: AgeObject): string => {
     return `${ageObj.years} ano${ageObj.years > 1 ? 's' : ''} e ${ageObj.months} mês${ageObj.months > 1 ? 'es' : ''}`;
 };
 
-const formatDate = (date: string): string => {
-    try {
-        const dateObj = new Date(date);
-        const day = String(dateObj.getDate()).padStart(2, '0');
-        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-        const year = dateObj.getFullYear();
-        return `${day} - ${month} - ${year}`;
-    } catch {
-        return 'Data inválida';
-    }
-};
-
-const getAnimalTypeName = (typeId: string): string => {
-    const type = props.animalTypes.find((t) => t.id === typeId);
-    return type ? type.name : 'Desconhecido';
+const getAnimalTypeName = (): string => {
+    if (!form.animal.animalTypeId) return '';
+    const type = props.animalTypes.find((t) => t.id === form.animal.animalTypeId);
+    return type?.name || '';
 };
 
 const getErrorMessage = (field: string): string => {
@@ -387,35 +302,14 @@ const validateForm = (): boolean => {
     return !form.hasErrors;
 };
 
-const resetForm = () => {
-    form.animal.name = originalForm.value.animal.name;
-    form.animal.animalTypeId = originalForm.value.animal.animalTypeId;
-    form.animal.birthday = originalForm.value.animal.birthday;
-    form.clearErrors();
-};
-
 const submitForm = () => {
     if (!validateForm()) {
         return;
     }
 
-    form.put(route('animals.update', animalData.value.id), {
+    form.post(route('animals.store'), {
         onSuccess: () => {
-            Object.assign(originalForm.value.animal, form.animal);
-        },
-    });
-};
-
-const deleteAnimal = () => {
-    deleting.value = true;
-
-    form.delete(route('animals.destroy', animalData.value.id), {
-        onSuccess: () => {
-            deleting.value = false;
-            showDeleteDialog.value = false;
-        },
-        onError: () => {
-            deleting.value = false;
+            form.reset();
         },
     });
 };

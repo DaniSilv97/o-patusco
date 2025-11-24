@@ -10,6 +10,7 @@ class AnimalResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'animal_type_id' => $this->animal_type_id,
             'animal_type' => $this->animalType->name,
             'birthday' => $this->birthday,
         ];

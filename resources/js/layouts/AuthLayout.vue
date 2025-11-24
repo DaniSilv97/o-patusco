@@ -45,6 +45,14 @@
                         </Link>
                     </v-list-item>
                     <v-list-item v-can="['is-client']">
+                        <Link :href="route('animals.create')">
+                            <v-btn class="!flex w-full !justify-start hover:cursor-pointer">
+                                <v-icon icon="mdi-paw-outline" class="mr-2"></v-icon>
+                                <v-list-item-title>Criar animail</v-list-item-title>
+                            </v-btn>
+                        </Link>
+                    </v-list-item>
+                    <v-list-item v-can="['is-client']">
                         <Link :href="route('consultations')">
                             <v-btn class="!flex w-full !justify-start hover:cursor-pointer">
                                 <v-icon icon="mdi-calendar" class="mr-2"></v-icon>

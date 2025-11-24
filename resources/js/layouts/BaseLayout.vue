@@ -4,7 +4,9 @@
     <v-layout class="base-layout">
         <v-app-bar scroll-behavior="hide" color="primary">
             <template v-slot:prepend>
-                <v-app-bar-title class="ml-4">O Patusco</v-app-bar-title>
+                <Link :href="route('home')" class="hover:pointer">
+                    <v-app-bar-title class="ml-4">O Patusco</v-app-bar-title>
+                </Link>
             </template>
 
             <template v-slot:append>
@@ -22,7 +24,7 @@
 <script setup lang="ts">
 import FlashNotification from '@/components/FlashNotification.vue';
 import { useAuthStore } from '@/stores/useAuthStore';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 
 const props = withDefaults(defineProps<{ title?: string }>(), {
     title: 'Homepage',

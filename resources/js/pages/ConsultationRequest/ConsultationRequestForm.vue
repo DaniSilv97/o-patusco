@@ -33,8 +33,8 @@
                                 variant="outlined"
                                 class="w-full"
                                 required
-                                :error="!!form.errors['animal.id']"
-                                :error-messages="form.errors['animal.id'] ? [form.errors['animal.id']] : []"
+                                :error="!!getErrorMessage('animal.id')"
+                                :error-messages="getErrorMessages('animal.id')"
                                 @update:model-value="handleAnimalSelect"
                                 @blur="validateAnimalSelection"
                             ></v-select>
@@ -42,14 +42,14 @@
                             <div v-if="selectedAnimal" class="rounded-lg border border-gray-200 bg-gray-50 p-3">
                                 <p class="text-sm"><strong>Tipo:</strong> {{ selectedAnimal.animalType }}</p>
                                 <p class="text-sm"><strong>Data de Nascimento:</strong> {{ formatDate(selectedAnimal.birthday) }}</p>
-                                <p class="text-sm"><strong>Idade:</strong> {{ calculateAge(selectedAnimal.birthday) }} anos</p>
+                                <p class="text-sm"><strong>Idade:</strong> {{ formatAge(calculateAge(selectedAnimal.birthday)) }}</p>
                             </div>
 
                             <v-divider class="my-3"></v-divider>
 
                             <p class="mb-2 text-xs">
                                 Não encontra o seu animal?
-                                <a href="#" class="text-secondary hover:underline">Registar novo animal</a>
+                                <a :href="route('animals.create')" class="text-secondary hover:underline">Registar novo animal</a>
                             </p>
                         </div>
 
@@ -62,8 +62,8 @@
                                 variant="outlined"
                                 placeholder="Ex: Fluffy"
                                 required
-                                :error="!!form.errors['animal.name']"
-                                :error-messages="form.errors['animal.name'] ? [form.errors['animal.name']] : []"
+                                :error="!!getErrorMessage('animal.name')"
+                                :error-messages="getErrorMessages('animal.name')"
                                 class="w-full"
                                 @input="validateAnimalName"
                                 @blur="validateAnimalName"
@@ -78,8 +78,8 @@
                                 variant="outlined"
                                 class="w-full"
                                 required
-                                :error="!!form.errors['animal.animalTypeId']"
-                                :error-messages="form.errors['animal.animalTypeId'] ? [form.errors['animal.animalTypeId']] : []"
+                                :error="!!getErrorMessage('animal.animalTypeId')"
+                                :error-messages="getErrorMessages('animal.animalTypeId')"
                                 @update:model-value="validateAnimalType"
                                 @blur="validateAnimalType"
                             ></v-select>
@@ -90,8 +90,8 @@
                                 type="date"
                                 variant="outlined"
                                 required
-                                :error="!!form.errors['animal.birthday']"
-                                :error-messages="form.errors['animal.birthday'] ? [form.errors['animal.birthday']] : []"
+                                :error="!!getErrorMessage('animal.birthday')"
+                                :error-messages="getErrorMessages('animal.birthday')"
                                 class="w-full"
                                 @input="validateAnimalBirthday"
                                 @blur="validateAnimalBirthday"
@@ -110,8 +110,8 @@
                             variant="outlined"
                             placeholder="Ex: João Silva"
                             required
-                            :error="!!form.errors['user.name']"
-                            :error-messages="form.errors['user.name'] ? [form.errors['user.name']] : []"
+                            :error="!!getErrorMessage('user.name')"
+                            :error-messages="getErrorMessages('user.name')"
                             class="mb-3 w-full"
                             @input="validateUserName"
                             @blur="validateUserName"
@@ -124,8 +124,8 @@
                             variant="outlined"
                             placeholder="Ex: joao@example.com"
                             required
-                            :error="!!form.errors['user.email']"
-                            :error-messages="form.errors['user.email'] ? [form.errors['user.email']] : []"
+                            :error="!!getErrorMessage('user.email')"
+                            :error-messages="getErrorMessages('user.email')"
                             class="mb-3 w-full"
                             @input="validateUserEmail"
                             @blur="validateUserEmail"
@@ -136,8 +136,8 @@
                             label="Data de Nascimento (Opcional)"
                             type="date"
                             variant="outlined"
-                            :error="!!form.errors['user.birthday']"
-                            :error-messages="form.errors['user.birthday'] ? [form.errors['user.birthday']] : []"
+                            :error="!!getErrorMessage('user.birthday')"
+                            :error-messages="getErrorMessages('user.birthday')"
                             class="w-full"
                             @input="validateUserBirthday"
                             @blur="validateUserBirthday"
@@ -155,8 +155,8 @@
                             variant="outlined"
                             placeholder="Ex: Fluffy"
                             required
-                            :error="!!form.errors['animal.name']"
-                            :error-messages="form.errors['animal.name'] ? [form.errors['animal.name']] : []"
+                            :error="!!getErrorMessage('animal.name')"
+                            :error-messages="getErrorMessages('animal.name')"
                             class="mb-3 w-full"
                             @input="validateAnimalName"
                             @blur="validateAnimalName"
@@ -171,8 +171,8 @@
                             variant="outlined"
                             class="mb-3 w-full"
                             required
-                            :error="!!form.errors['animal.animalTypeId']"
-                            :error-messages="form.errors['animal.animalTypeId'] ? [form.errors['animal.animalTypeId']] : []"
+                            :error="!!getErrorMessage('animal.animalTypeId')"
+                            :error-messages="getErrorMessages('animal.animalTypeId')"
                             @update:model-value="validateAnimalType"
                             @blur="validateAnimalType"
                         ></v-select>
@@ -183,8 +183,8 @@
                             type="date"
                             variant="outlined"
                             required
-                            :error="!!form.errors['animal.birthday']"
-                            :error-messages="form.errors['animal.birthday'] ? [form.errors['animal.birthday']] : []"
+                            :error="!!getErrorMessage('animal.birthday')"
+                            :error-messages="getErrorMessages('animal.birthday')"
                             class="w-full"
                             @input="validateAnimalBirthday"
                             @blur="validateAnimalBirthday"
@@ -204,8 +204,8 @@
                             type="date"
                             variant="outlined"
                             required
-                            :error="!!form.errors['date']"
-                            :error-messages="form.errors['date'] ? [form.errors['date']] : []"
+                            :error="!!getErrorMessage('date')"
+                            :error-messages="getErrorMessages('date')"
                             class="mb-3 w-full"
                             @input="validateConsultationDate"
                             @blur="validateConsultationDate"
@@ -219,8 +219,8 @@
                             label="Horário"
                             variant="outlined"
                             required
-                            :error="!!form.errors['timeframe']"
-                            :error-messages="form.errors['timeframe'] ? [form.errors['timeframe']] : []"
+                            :error="!!getErrorMessage('timeframe')"
+                            :error-messages="getErrorMessages('timeframe')"
                             @update:model-value="validateTimeframe"
                             @blur="validateTimeframe"
                         ></v-select>
@@ -237,8 +237,8 @@
                                     rows="4"
                                     counter="255"
                                     maxlength="255"
-                                    :error="!!form.errors['observations']"
-                                    :error-messages="form.errors['observations'] ? [form.errors['observations']] : []"
+                                    :error="!!getErrorMessage('observations')"
+                                    :error-messages="getErrorMessages('observations')"
                                     class="w-full"
                                     @input="validateObservations"
                                     @blur="validateObservations"
@@ -255,12 +255,19 @@
                         color="gray"
                         class="flex-1 hover:cursor-pointer"
                         @click="handleCancel"
-                        :disabled="isLoading"
+                        :disabled="form.processing"
                     >
                         <v-icon class="mr-2">mdi-close</v-icon>
                         Cancelar
                     </v-btn>
-                    <v-btn size="large" color="primary" variant="elevated" class="flex-1 hover:cursor-pointer" @click="submit" :loading="isLoading">
+                    <v-btn
+                        size="large"
+                        color="primary"
+                        variant="elevated"
+                        class="flex-1 hover:cursor-pointer"
+                        @click="submit"
+                        :loading="form.processing"
+                    >
                         <v-icon class="mr-2">mdi-check-circle</v-icon>
                         Enviar Pedido
                     </v-btn>
@@ -272,8 +279,9 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/useAuthStore';
-import { computed, ref, watch } from 'vue';
-import { Animal, AnimalType, ConsultationFormData, FormErrors, Timeframe } from './CreateConsultationRequest.vue';
+import { useForm } from '@inertiajs/vue3';
+import { computed, watch } from 'vue';
+import { Animal, AnimalType, Timeframe } from './CreateConsultationRequest.vue';
 
 const props = defineProps({
     animals: {
@@ -288,21 +296,18 @@ const props = defineProps({
         type: Array as () => Timeframe[],
         required: true,
     },
-    isLoading: {
-        type: Boolean,
-        default: false,
-    },
-    errors: {
-        type: Object as () => FormErrors,
-        default: () => ({}),
-    },
 });
 
 const emit = defineEmits(['submit', 'cancel']);
 
 const authStore = useAuthStore();
 
-const form = ref<ConsultationFormData & { errors: FormErrors }>({
+interface AgeObject {
+    years: number;
+    months: number;
+}
+
+const form = useForm({
     user: {
         id: authStore.user?.id || '',
         name: authStore.user?.name || '',
@@ -318,7 +323,6 @@ const form = ref<ConsultationFormData & { errors: FormErrors }>({
     date: '',
     timeframe: '',
     observations: '',
-    errors: {},
 });
 
 const isAuthenticated = computed(() => authStore.isAuthenticated);
@@ -333,8 +337,8 @@ const animalSelectOptions = computed(() => {
 });
 
 const selectedAnimal = computed(() => {
-    if (!form.value.animal.id) return null;
-    const animal = props.animals.find((a) => a.id === form.value.animal.id);
+    if (!form.animal.id) return null;
+    const animal = props.animals.find((a) => a.id === form.animal.id);
     if (!animal) return null;
 
     return {
@@ -361,34 +365,81 @@ const formatDate = (dateString: string): string => {
     }
 };
 
-const calculateAge = (birthday: string): number => {
+const calculateAge = (birthday: string): AgeObject => {
     try {
+        if (!birthday) return { years: 0, months: 0 };
         const birthDate = new Date(birthday);
         const today = new Date();
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDiff = today.getMonth() - birthDate.getMonth();
+        let years = today.getFullYear() - birthDate.getFullYear();
+        let months = today.getMonth() - birthDate.getMonth();
 
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
+        if (months < 0) {
+            years--;
+            months += 12;
         }
 
-        return age;
+        if (today.getDate() < birthDate.getDate()) {
+            months--;
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+        }
+
+        return { years: Math.max(0, years), months: Math.max(0, months) };
     } catch {
-        return 0;
+        return { years: 0, months: 0 };
     }
 };
 
+const formatAge = (ageObj: AgeObject): string => {
+    if (ageObj.years === 0 && ageObj.months === 0) return '0 meses';
+    if (ageObj.years === 0) return `${ageObj.months} mês${ageObj.months > 1 ? 'es' : ''}`;
+    if (ageObj.months === 0) return `${ageObj.years} ano${ageObj.years > 1 ? 's' : ''}`;
+    return `${ageObj.years} ano${ageObj.years > 1 ? 's' : ''} e ${ageObj.months} mês${ageObj.months > 1 ? 'es' : ''}`;
+};
+
+const getErrorMessage = (field: string): string => {
+    const keys = field.split('.');
+    let current: any = form.errors;
+
+    for (const key of keys) {
+        if (!current || typeof current !== 'object') {
+            return '';
+        }
+        current = current[key];
+    }
+
+    return typeof current === 'string' ? current : '';
+};
+
+const getErrorMessages = (field: string): string[] => {
+    const message = getErrorMessage(field);
+    return message ? [message] : [];
+};
+
 const clearError = (field: string) => {
-    form.value.errors[field] = undefined;
+    const keys = field.split('.');
+    const topLevelKey = keys[0] as keyof typeof form.errors;
+    form.clearErrors(topLevelKey);
 };
 
 const setError = (field: string, message: string) => {
-    form.value.errors[field] = message;
+    const keys = field.split('.');
+    const topLevelKey = keys[0] as keyof typeof form.errors;
+
+    if (keys.length === 1) {
+        form.setError(topLevelKey, message);
+    } else {
+        const currentError = form.errors[topLevelKey];
+        const errorObj = typeof currentError === 'object' && currentError !== null ? (currentError as Record<string, string>) : {};
+        (form.errors[topLevelKey] as any) = { ...errorObj, [field]: message };
+    }
 };
 
 const validateUserName = () => {
     clearError('user.name');
-    const name = form.value.user.name?.trim();
+    const name = form.user.name?.trim();
 
     if (!name) {
         setError('user.name', 'Nome completo é obrigatório');
@@ -401,7 +452,7 @@ const validateUserName = () => {
 
 const validateUserEmail = () => {
     clearError('user.email');
-    const email = form.value.user.email?.trim();
+    const email = form.user.email?.trim();
 
     if (!email) {
         setError('user.email', 'Email é obrigatório');
@@ -412,7 +463,7 @@ const validateUserEmail = () => {
 
 const validateUserBirthday = () => {
     clearError('user.birthday');
-    const birthday = form.value.user.birthday;
+    const birthday = form.user.birthday;
 
     if (!birthday) {
         return;
@@ -434,7 +485,7 @@ const validateUserBirthday = () => {
 
 const validateAnimalName = () => {
     clearError('animal.name');
-    const name = form.value.animal.name?.trim();
+    const name = form.animal.name?.trim();
 
     if (!name) {
         setError('animal.name', 'Nome do animal é obrigatório');
@@ -448,14 +499,14 @@ const validateAnimalName = () => {
 const validateAnimalType = () => {
     clearError('animal.animalTypeId');
 
-    if (!form.value.animal.animalTypeId) {
+    if (!form.animal.animalTypeId) {
         setError('animal.animalTypeId', 'Tipo de animal é obrigatório');
     }
 };
 
 const validateAnimalBirthday = () => {
     clearError('animal.birthday');
-    const birthday = form.value.animal.birthday;
+    const birthday = form.animal.birthday;
 
     if (!birthday) {
         setError('animal.birthday', 'Data de nascimento é obrigatória');
@@ -476,14 +527,14 @@ const validateAnimalBirthday = () => {
 const validateAnimalSelection = () => {
     clearError('animal.id');
 
-    if (!form.value.animal.id) {
+    if (!form.animal.id) {
         setError('animal.id', 'Selecione um animal');
     }
 };
 
 const validateConsultationDate = () => {
     clearError('date');
-    const date = form.value.date;
+    const date = form.date;
 
     if (!date) {
         setError('date', 'Data da consulta é obrigatória');
@@ -505,14 +556,14 @@ const validateConsultationDate = () => {
 const validateTimeframe = () => {
     clearError('timeframe');
 
-    if (!form.value.timeframe) {
+    if (!form.timeframe) {
         setError('timeframe', 'Horário é obrigatório');
     }
 };
 
 const validateObservations = () => {
     clearError('observations');
-    const observations = form.value.observations;
+    const observations = form.observations;
 
     if (observations && observations.length > 255) {
         setError('observations', 'Observações não podem exceder 255 caracteres');
@@ -534,15 +585,15 @@ const validateForm = (): boolean => {
         validateAnimalSelection();
     }
 
-    return Object.values(form.value.errors).every((error) => !error);
+    return !form.hasErrors;
 };
 
 const handleAnimalSelect = () => {
-    const selected = props.animals.find((a) => a.id === form.value.animal.id);
+    const selected = props.animals.find((a) => a.id === form.animal.id);
     if (selected) {
-        form.value.animal.name = selected.name;
-        form.value.animal.birthday = selected.birthday;
-        form.value.animal.animalTypeId = selected.animalTypeId;
+        form.animal.name = selected.name;
+        form.animal.birthday = selected.birthday;
+        form.animal.animalTypeId = selected.animalTypeId;
     }
 };
 
@@ -551,19 +602,23 @@ const submit = () => {
         return;
     }
 
-    const formData = {
-        ...form.value,
-        animal: {
-            ...form.value.animal,
-            birthday: form.value.animal.birthday,
-        },
+    emit('submit', {
         user: {
-            ...form.value.user,
-            birthday: form.value.user.birthday || undefined,
+            id: form.user.id,
+            name: form.user.name,
+            email: form.user.email,
+            birthday: form.user.birthday || undefined,
         },
-    };
-
-    emit('submit', formData);
+        animal: {
+            id: form.animal.id,
+            name: form.animal.name,
+            birthday: form.animal.birthday,
+            animalTypeId: form.animal.animalTypeId,
+        },
+        date: form.date,
+        timeframe: form.timeframe,
+        observations: form.observations,
+    });
 };
 
 const handleCancel = () => {
@@ -574,9 +629,9 @@ watch(
     () => authStore.user,
     (newUser) => {
         if (newUser) {
-            form.value.user.id = newUser.id;
-            form.value.user.name = newUser.name;
-            form.value.user.email = newUser.email;
+            form.user.id = newUser.id;
+            form.user.name = newUser.name;
+            form.user.email = newUser.email;
         }
     },
 );

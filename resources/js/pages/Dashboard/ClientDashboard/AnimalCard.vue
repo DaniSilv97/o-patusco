@@ -9,7 +9,7 @@
 
         <div class="mb-4 flex flex-col gap-2 text-sm text-gray-600">
             <p><strong>Data de Nascimento:</strong> {{ formatDate(animal.birthday) }}</p>
-            <p><strong>Idade aproximada:</strong> {{ calculateAge(animal.birthday) }} anos</p>
+            <p><strong>Idade aproximada:</strong> {{ formatAge(calculateAge(animal.birthday)) }}</p>
         </div>
 
         <v-btn size="small" variant="outlined" color="primary" class="w-full hover:cursor-pointer" @click="handleViewDetails"> Ver Detalhes </v-btn>
@@ -22,6 +22,11 @@ interface Animal {
     name: string;
     animal_type: string;
     birthday: string;
+}
+
+interface AgeObject {
+    years: number;
+    months: number;
 }
 
 const props = defineProps({
@@ -46,21 +51,38 @@ const formatDate = (dateString: string): string => {
     }
 };
 
-const calculateAge = (birthday: string): number => {
+const calculateAge = (birthday: string): AgeObject => {
     try {
+        if (!birthday) return { years: 0, months: 0 };
         const birthDate = new Date(birthday);
         const today = new Date();
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDiff = today.getMonth() - birthDate.getMonth();
+        let years = today.getFullYear() - birthDate.getFullYear();
+        let months = today.getMonth() - birthDate.getMonth();
 
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
+        if (months < 0) {
+            years--;
+            months += 12;
         }
 
-        return age;
+        if (today.getDate() < birthDate.getDate()) {
+            months--;
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+        }
+
+        return { years: Math.max(0, years), months: Math.max(0, months) };
     } catch {
-        return 0;
+        return { years: 0, months: 0 };
     }
+};
+
+const formatAge = (ageObj: AgeObject): string => {
+    if (ageObj.years === 0 && ageObj.months === 0) return '0 meses';
+    if (ageObj.years === 0) return `${ageObj.months} mês${ageObj.months > 1 ? 'es' : ''}`;
+    if (ageObj.months === 0) return `${ageObj.years} ano${ageObj.years > 1 ? 's' : ''}`;
+    return `${ageObj.years} ano${ageObj.years > 1 ? 's' : ''} e ${ageObj.months} mês${ageObj.months > 1 ? 'es' : ''}`;
 };
 
 const handleViewDetails = () => {

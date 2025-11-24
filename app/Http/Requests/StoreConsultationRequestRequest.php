@@ -31,16 +31,16 @@ class StoreConsultationRequestRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'user.name.required' => 'The user name is required.',
-            'user.email.required' => 'The user email is required.',
-            'user.email.email' => 'The user email must be a valid email address.',
-            'animal.name.required' => 'The animal name is required.',
-            'animal.birthday.required' => 'The animal birthday is required.',
-            'animal.animalTypeId.required' => 'The animal type is required.',
-            'date.required' => 'The consultation date is required.',
-            'date.after_or_equal' => 'The consultation date must be today or in the future.',
-            'timeframe.required' => 'The consultation timeframe is required.',
-            'observations.max' => 'The observations cannot exceed 1000 characters.',
+            'user.name.required' => 'O nome do utilizador é obrigatório.',
+            'user.email.required' => 'O email do utilizador é obrigatório.',
+            'user.email.email' => 'O email do utilizador deve ser um endereço de email válido.',
+            'animal.name.required' => 'O nome do animal é obrigatório.',
+            'animal.birthday.required' => 'A data de nascimento do animal é obrigatória.',
+            'animal.animalTypeId.required' => 'O tipo de animal é obrigatório.',
+            'date.required' => 'A data da consulta é obrigatória.',
+            'date.after_or_equal' => 'A data da consulta deve ser hoje ou no futuro.',
+            'timeframe.required' => 'O intervalo de tempo da consulta é obrigatório.',
+            'observations.max' => 'As observações não podem exceder 1000 caracteres.',
         ];
     }
 }

@@ -37,6 +37,14 @@ Route::middleware(['auth', 'verified', 'client'])->group(function () {
         ->name('dashboard');
     Route::get('/animals', [AnimalController::class, 'index'])
         ->name('animals');
+    Route::get('/animals/create', [AnimalController::class, 'create'])
+        ->name('animals.create');
+    Route::post('/animals/create', [AnimalController::class, 'store'])
+        ->name('animals.store');
+    Route::delete('/animals/delete', [AnimalController::class, 'destroy'])
+        ->name('animals.store');
+    Route::put('/animals/update/{animal}', [AnimalController::class, 'update'])
+        ->name('animals.update');
     Route::get('/animals/{animal}', [AnimalController::class, 'show'])
         ->name('animals.show');
     Route::get('/consultations', [ConsultationController::class, 'index'])
