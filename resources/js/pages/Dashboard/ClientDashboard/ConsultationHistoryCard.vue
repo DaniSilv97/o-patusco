@@ -1,19 +1,23 @@
 <template>
-    <div class="rounded border-l-4 border-green-500 bg-green-50 p-4">
-        <div class="flex items-start justify-between">
-            <div class="flex-1">
-                <p class="text-sm text-gray-600"><strong>Animal:</strong> {{ consultation.animal_name }}</p>
-                <p class="text-sm text-gray-600"><strong>Data da Consulta:</strong> {{ formatDate(consultation.date) }}</p>
-                <p class="mt-2 text-gray-700"><strong>Notas do Veterinário:</strong> {{ consultation.veterinarian_note }}</p>
+    <div class="border-primary rounded border-l-4 bg-green-100 p-4 transition hover:bg-green-200">
+        <Link :href="route('consultation', consultation.id)">
+            <div class="flex items-start justify-between">
+                <div class="flex-1">
+                    <p class="text-sm text-gray-600"><strong>Animal:</strong> {{ consultation.animal_name }}</p>
+                    <p class="text-sm text-gray-600"><strong>Data da Consulta:</strong> {{ formatDate(consultation.date) }}</p>
+                    <p class="mt-2 text-gray-700"><strong>Notas do Veterinário:</strong> {{ consultation.veterinarian_note }}</p>
+                </div>
+                <v-chip size="small" color="green" text-color="white">
+                    {{ consultation.state }}
+                </v-chip>
             </div>
-            <v-chip size="small" color="green" text-color="white">
-                {{ consultation.state }}
-            </v-chip>
-        </div>
+        </Link>
     </div>
 </template>
 
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
+
 interface Consultation {
     id: string;
     animal_name: string;

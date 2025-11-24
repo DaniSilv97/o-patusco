@@ -1,19 +1,23 @@
 <template>
-    <div class="rounded border-l-4 border-blue-500 bg-blue-50 p-4">
-        <div class="flex items-start justify-between">
-            <div class="flex-1">
-                <p class="text-sm text-gray-600"><strong>Animal:</strong> {{ request.animal_name }}</p>
-                <p class="text-sm text-gray-600"><strong>Data:</strong> {{ formatDate(request.date) }}</p>
-                <p class="mt-2 text-gray-700">{{ request.client_note }}</p>
+    <div class="border-secondary rounded border-l-4 bg-green-50 p-4 transition hover:bg-green-100">
+        <Link :href="route('consultation', request.id)">
+            <div class="flex items-start justify-between hover:cursor-pointer">
+                <div class="flex-1">
+                    <p class="text-sm text-gray-600"><strong>Animal:</strong> {{ request.animal_name }}</p>
+                    <p class="text-sm text-gray-600"><strong>Data:</strong> {{ formatDate(request.date) }}</p>
+                    <p class="mt-2 text-gray-700">{{ request.client_note }}</p>
+                </div>
+                <v-chip size="small" color="blue" text-color="white">
+                    {{ request.timeframe }}
+                </v-chip>
             </div>
-            <v-chip size="small" color="blue" text-color="white">
-                {{ request.timeframe }}
-            </v-chip>
-        </div>
+        </Link>
     </div>
 </template>
 
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
+
 interface ConsultationRequest {
     id: string;
     animal_name: string;

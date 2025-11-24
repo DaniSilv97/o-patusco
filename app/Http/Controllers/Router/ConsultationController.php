@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Router;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ConsultationRequestResource;
+use App\Http\Resources\ConsultationResource;
 use App\Models\Consultation;
 use App\Models\ConsultationRequest;
+use App\Models\ConsultationTimeframe;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -31,12 +34,60 @@ class ConsultationController extends Controller
     private function showConsultationRequest(Request $request, ConsultationRequest $consultationRequest)
     {
         $this->authorize('view', $consultationRequest);
-        return Inertia::render('Consultations/ShowConsultation/ShowConsultation', []);
+
+        $consultationRequest->load(['animal', 'timeframe']);
+
+        $timeframes = ConsultationTimeframe::all(['id', 'name']);
+
+        return Inertia::render('Consultations/ShowConsultation/Client/ShowConsultationRequest', [
+            'consultationRequest' => new ConsultationRequestResource($consultationRequest),
+            'timeframes' => $timeframes,
+        ]);
     }
 
     private function showConsultation(Request $request, Consultation $consultation)
     {
         $this->authorize('view', $consultation);
-        return Inertia::render('Consultations/ShowConsultation/ShowConsultationRequest', []);
+
+        $consultation->load(['state', 'consultationRequest.animal','veterinarian']);
+
+        return Inertia::render('Consultations/ShowConsultation/Client/ShowConsultation', [
+            'consultation' => new ConsultationResource($consultation),
+            'veterinarian'=> $consultation->veterinarian->name,
+        ]);
+    }
+
+    public function updateConsultationRequest(Request $request, $id)
+    {
+        $consultationRequest = ConsultationRequest::findOrFail($id);
+        
+        $this->authorize('update', $consultationRequest);
+
+        $validated = $request->validate([
+            'date' => 'required|date|after_or_equal:today',
+            'consultation_timeframe_id' => 'required|exists:consultation_timeframes,id',
+            'client_note' => 'nullable|string|max:500',
+        ]);
+
+        $consultationRequest->update([
+            'date' => $validated['date'],
+            'consultation_timeframe_id' => $validated['consultation_timeframe_id'],
+            'client_note' => $validated['client_note'],
+        ]);
+
+        return redirect()->route('consultation', $consultationRequest->id)
+            ->with('success', 'Pedido de consulta atualizado com sucesso');
+    }
+
+    public function deleteConsultationRequest(Request $request, $id)
+    {
+        $consultationRequest = ConsultationRequest::findOrFail($id);
+        
+        $this->authorize('delete', $consultationRequest);
+
+        $consultationRequest->delete();
+
+        return redirect()->route('dashboard')
+            ->with('success', 'Pedido de consulta eliminado com sucesso');
     }
 }

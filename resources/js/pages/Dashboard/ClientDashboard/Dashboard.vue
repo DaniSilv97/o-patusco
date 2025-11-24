@@ -105,7 +105,7 @@ const requestCount = computed(() => props.counts.consultationRequests);
 const consultationCount = computed(() => props.counts.consultations);
 
 const handleNewConsultation = () => {
-    router.visit(route('consultation'));
+    router.visit(route('consultation.create'));
 };
 
 const handleListConsultations = () => {

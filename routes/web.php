@@ -27,38 +27,49 @@ Route::get('/', function () {
 })->name('home');
 
 
-Route::get('/consultation', [ConsultationRequestController::class, 'create'])
-    ->name('consultation');
-Route::post('/consultation', [ConsultationRequestController::class, 'store'])
+Route::get('/consultation/create', [ConsultationRequestController::class, 'create'])
+    ->name('consultation.create');
+Route::post('/consultation/store', [ConsultationRequestController::class, 'store'])
     ->name('consultation.store');
 
-Route::middleware(['auth', 'verified', 'client'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard');
-    Route::get('/animals', [AnimalController::class, 'index'])
-        ->name('animals');
-    Route::get('/animals/create', [AnimalController::class, 'create'])
-        ->name('animals.create');
-    Route::post('/animals/create', [AnimalController::class, 'store'])
-        ->name('animals.store');
-    Route::delete('/animals/delete', [AnimalController::class, 'destroy'])
-        ->name('animals.store');
-    Route::put('/animals/update/{animal}', [AnimalController::class, 'update'])
-        ->name('animals.update');
-    Route::get('/animals/{animal}', [AnimalController::class, 'show'])
-        ->name('animals.show');
-    Route::get('/consultations', [ConsultationController::class, 'index'])
-        ->name('consultations');
-});
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::middleware('client')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->name('dashboard');
+        Route::get('/animals', [AnimalController::class, 'index'])
+            ->name('animals');
+        Route::get('/animals/create', [AnimalController::class, 'create'])
+            ->name('animals.create');
+        Route::post('/animals/create', [AnimalController::class, 'store'])
+            ->name('animals.store');
+        Route::delete('/animals/delete', [AnimalController::class, 'destroy'])
+            ->name('animals.store');
+        Route::put('/animals/update/{animal}', [AnimalController::class, 'update'])
+            ->name('animals.update');
+        Route::get('/animals/{animal}', [AnimalController::class, 'show'])
+            ->name('animals.show');
+        Route::get('/consultations', [ConsultationController::class, 'index'])
+            ->name('consultations');
+        Route::get('/consultation/{id}', [ConsultationController::class, 'show'])
+            ->name('consultation');
+        Route::put('/consultation/update/{id}', [ConsultationController::class, 'updateConsultationRequest'])
+            ->name('consultation.update');
+        Route::delete('/consultation/delete/{id}', [ConsultationController::class, 'deleteConsultationRequest'])
+            ->name('consultation.delete');
+    });
+    Route::middleware('receptionist')->prefix('receptionist')->group(function () {
+        Route::get('/dashboard', [ReceptionistController::class, 'indexDashboard'])
+            ->name('receptionist.dashboard');
+        Route::get('/consultation/{id}', [ReceptionistController::class, 'showConsultation'])
+            ->name('receptionist.consultation');
+    });
 
-Route::middleware(['auth', 'verified', 'receptionist'])->group(function () {
-    Route::get('/receptionist/dashboard', [ReceptionistController::class, 'indexDashboard'])
-        ->name('receptionist.dashboard');
-});
-
-Route::middleware(['auth', 'verified', 'veterinarian'])->group(function () {
-    Route::get('/veterinarian/dashboard', [VeterinarianController::class, 'indexDashboard'])
-        ->name('veterinarian.dashboard');
+    Route::middleware('veterinarian')->prefix('veterinarian')->group(function () {
+        Route::get('/dashboard', [VeterinarianController::class, 'indexDashboard'])
+            ->name('veterinarian.dashboard');
+        Route::get('/consultation/{id}', [VeterinarianController::class, 'showConsultation'])
+            ->name('veterinarian.consultation');
+    });
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

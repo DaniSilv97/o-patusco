@@ -26,4 +26,29 @@ class ConsultationRequestPolicy
 
         return false;
     }
+    public function update(User $user, ConsultationRequest $consultationRequest): bool
+    {
+        if ($user->can('is-receptionist')) {
+            return true;
+        }
+
+        if ($consultationRequest->animal?->user_id === $user->id) {
+            return true;
+        }
+
+        return false;
+    }
+    public function delete(User $user, ConsultationRequest $consultationRequest): bool
+    {
+        if ($user->can('is-receptionist')) {
+            return true;
+        }
+
+        if ($consultationRequest->animal?->user_id === $user->id) {
+            return true;
+        }
+
+        return false;
+    }
+    
 }
