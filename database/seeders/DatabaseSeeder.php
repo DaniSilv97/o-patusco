@@ -70,7 +70,7 @@ class DatabaseSeeder extends Seeder
 
         $this->command->info('Creating random animals with requests and consultations...');
 
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $randomAnimal = Animal::factory()->forOwner($userCliente)->create();
 
             $requestCount = rand(1, 3);
